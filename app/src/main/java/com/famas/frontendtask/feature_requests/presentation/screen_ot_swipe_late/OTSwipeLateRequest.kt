@@ -63,7 +63,7 @@ fun OTSwipeLateRequestScreen() {
         OutlinedTextField(
             value = reason, onValueChange = { reason = it }, maxLines = 5, modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp),
+                .height(150.dp),
             label = { Text(text = "Reason") }
         )
 

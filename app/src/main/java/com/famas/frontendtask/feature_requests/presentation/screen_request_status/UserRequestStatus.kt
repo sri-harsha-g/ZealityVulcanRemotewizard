@@ -33,8 +33,6 @@ fun UserRequestsStatusScreen(
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
     val tabs = remember { listOf(RequestStatusTab.Pending ,RequestStatusTab.Approved) }
-    var showDialog by remember { mutableStateOf(false) }
-    var reason by remember { mutableStateOf("") }
     val coroutine = rememberCoroutineScope()
 
     Column(modifier = modifier) {
@@ -86,37 +84,6 @@ fun UserRequestsStatusScreen(
                                 modifier = Modifier.padding(vertical = SpaceSmall)
                             )
                         }
-                    }
-                }
-            }
-        }
-    }
-
-
-    if (showDialog) {
-        Dialog(onDismissRequest = { showDialog = false }) {
-            Card {
-                Column(modifier = Modifier.padding(SpaceSemiLarge)) {
-                    EmphasisText(
-                        text = "Please specify the reason",
-                        style = MaterialTheme.typography.subtitle1
-                    )
-                    Spacer(modifier = Modifier.height(SpaceSemiLarge))
-                    OutlinedTextField(
-                        value = reason,
-                        onValueChange = { reason = it },
-                        maxLines = 5,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(100.dp),
-                        label = { Text(text = "Reason") }
-                    )
-                    Spacer(modifier = Modifier.height(SpaceSemiLarge))
-                    Button(
-                        onClick = { showDialog = false },
-                        modifier = Modifier.align(Alignment.End)
-                    ) {
-                        Text(text = "Confirm")
                     }
                 }
             }
