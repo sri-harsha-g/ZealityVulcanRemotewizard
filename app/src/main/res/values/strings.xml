@@ -5,4 +5,5 @@
     <string name="leave_or_vacation_btn_txt">Leave/Vacation</string>
     <string name="request_btn_txt">REQUEST</string>
     <string name="select_date_manual_attendence">select date for attendence</string>
+    <string name="except_cam_perm">Please accept camera permission</string>
 </resources>

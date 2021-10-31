@@ -5,25 +5,31 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.famas.frontendtask.core.util.Constants.SCREEN_SLIDE_DURATION
 import com.famas.frontendtask.core.navigation.Screen.*
 import com.famas.frontendtask.core.presentation.util.BottomNavItem.*
+import com.famas.frontendtask.core.util.Constants
+import com.famas.frontendtask.core.util.Constants.AUTH_SCREEN
+import com.famas.frontendtask.feature_auth.presentation.AuthScreen
 import com.famas.frontendtask.feature_dash_board.presentation.DashBoardScreen
+import com.famas.frontendtask.feature_face_auth.presentation.CameraPreviewScreen
 import com.famas.frontendtask.feature_hrms.presentation.HRMS
 import com.famas.frontendtask.feature_id_card.presentation.IDCardScreen
 import com.famas.frontendtask.feature_manual_attendence.presentation.ManualAttendance
 import com.famas.frontendtask.feature_payslips.presentation.PayslipsScreen
 import com.famas.frontendtask.feature_reports.presentation.ReportsScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation.LeaveVacationRequest
-import com.famas.frontendtask.feature_requests.presentation.OTSwipeLateRequestScreen
+import com.famas.frontendtask.feature_requests.presentation.screen_ot_swipe_late.OTSwipeLateRequestScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_request.RequestScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_request_status.PendingRequests
-import com.famas.frontendtask.feature_requests.presentation.screen_request_status.UserRequestsStatusScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalPagerApi
@@ -34,7 +40,26 @@ fun MainNavHost(
     navController: NavHostController,
     scaffoldState: ScaffoldState
 ) {
-    AnimatedNavHost(navController = navController, startDestination = DashBoard.route, modifier = modifier) {
+    val scope = rememberCoroutineScope()
+    AnimatedNavHost(
+        navController = navController,
+        startDestination = AUTH_SCREEN,
+        modifier = modifier
+    ) {
+
+        composable(AUTH_SCREEN) {
+            AuthScreen(
+                navigate = {
+                    navController.navigate(it)
+                },
+                showSnackBar = {
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(it)
+                    }
+                }
+            )
+        }
+
         composable(DashBoard.route) {
             DashBoardScreen(scaffoldState) {
                 navController.navigate(it)
@@ -59,6 +84,14 @@ fun MainNavHost(
 
         composable(IDCard.route) {
             IDCardScreen()
+        }
+
+        composable(CameraAuth.route) {
+            CameraPreviewScreen(navigate = { navController.navigate(it) }, showSnackbar = {
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(it)
+                }
+            })
         }
 
         composable(Reports.route) {

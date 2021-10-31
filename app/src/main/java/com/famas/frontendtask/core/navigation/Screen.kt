@@ -2,6 +2,7 @@ package com.famas.frontendtask.core.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.famas.frontendtask.core.navigation.Screen.*
 
@@ -17,12 +18,12 @@ sealed class Screen(val route: String, val title: String, val icon: (Boolean) ->
     object Reports: Screen("_reports", "Reports", { if (it) Icons.Filled.Report else Icons.Default.Report })
     object LeaveOrVacationRequest: Screen("_leave_or_vacation_request", "Leave Or Vacation Request")
     object OTSwipeLateRequest: Screen("ot_swipe_late_request", "OT/Swipe/Late Request")
-    object PendingRequest: Screen("pending_request", "Pending Request")
+    object CameraAuth: Screen("_camera_auth", "Camera auth", { if (it) Icons.Filled.CameraAlt else Icons.Outlined.CameraAlt})
 }
 
 
 fun String.getScreen(): Screen? {
-    return listOf(DashBoard, ManualAttendance, HRMS, Requests, Payslips, IDCard, Reports, LeaveOrVacationRequest, OTSwipeLateRequest, PendingRequest).find {
+    return listOf(DashBoard, ManualAttendance, HRMS, Requests, Payslips, IDCard, Reports, LeaveOrVacationRequest, OTSwipeLateRequest, PendingRequests, CameraAuth).find {
         it.route == this
     }
 }

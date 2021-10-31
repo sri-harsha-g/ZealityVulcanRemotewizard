@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import java.util.*
 
 
 fun Dp.toPx(): Float {
@@ -19,4 +20,12 @@ fun Dp.toPx(): Float {
 
 fun Float.toDp(): Dp {
     return (this / Resources.getSystem().displayMetrics.density).dp
+}
+
+
+
+fun Long?.toDate(): String {
+    return this?.let {
+        Date(it).toString()
+    } ?: "none"
 }

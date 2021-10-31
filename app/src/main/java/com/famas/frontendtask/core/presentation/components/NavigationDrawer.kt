@@ -4,6 +4,8 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -24,19 +26,22 @@ fun NavigationDrawer(
     currentScreen: Screen,
     onItemClick: (Screen) -> Unit
 ) {
-    Column {
-        Spacer(modifier = Modifier.height(150.dp))
-        Text(
-            text = "My Profile",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(start = SpaceSemiLarge)
-        )
-        EmphasisText(
-            text = "Employee id",
-            modifier = Modifier.padding(start = SpaceSemiLarge)
-        )
-        Divider(Modifier.padding(vertical = SpaceSemiSmall))
-        screens.forEach {
+    LazyColumn {
+        item {
+            Spacer(modifier = Modifier.height(150.dp))
+            Text(
+                text = "My Profile",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(start = SpaceSemiLarge)
+            )
+            EmphasisText(
+                text = "Employee id",
+                modifier = Modifier.padding(start = SpaceSemiLarge)
+            )
+            Divider(Modifier.padding(vertical = SpaceSemiSmall))
+        }
+
+        items(screens) {
             DrawerItem(screen = it, isSelected = it == currentScreen) {
                 onItemClick(it)
             }

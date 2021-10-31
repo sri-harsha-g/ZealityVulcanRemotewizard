@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.*
@@ -22,7 +23,7 @@ fun EmployeeCard(
     onAccept: () -> Unit = {},
     onReject: () -> Unit = {}
 ) {
-    var expand by remember { mutableStateOf(false) }
+    var expand by rememberSaveable { mutableStateOf(false) }
 
     Card(
         modifier = modifier.fillMaxWidth(),
