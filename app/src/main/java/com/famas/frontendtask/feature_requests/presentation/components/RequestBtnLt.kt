@@ -3,6 +3,7 @@ package com.famas.frontendtask.feature_requests.presentation.components
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -10,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.famas.frontendtask.R
 import com.famas.frontendtask.core.navigation.Screen
+import com.famas.frontendtask.core.presentation.components.EmphasisText
 import com.famas.frontendtask.core.ui.theme.*
 
 @Composable
@@ -43,7 +45,7 @@ fun RequestBtnItem(
     val elevation = ButtonDefaults.elevation(defaultElevation = 0.dp, pressedElevation = 0.dp)
     Surface(
         modifier = modifier.padding(SpaceSmall),
-        color = Orange100,
+        color = MaterialTheme.colors.secondary,
         shape = MaterialTheme.shapes.small
     ) {
         Row(
@@ -52,7 +54,7 @@ fun RequestBtnItem(
                 .padding(SpaceSmall),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = title, style = MaterialTheme.typography.subtitle1)
+            Text(text = title, style = MaterialTheme.typography.subtitle1, color = contentColorFor(backgroundColor = MaterialTheme.colors.secondary))
             Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = onClick,

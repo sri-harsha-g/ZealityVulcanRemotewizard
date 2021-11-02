@@ -5,16 +5,16 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.famas.frontendtask.core.util.Constants.SCREEN_SLIDE_DURATION
 import com.famas.frontendtask.core.navigation.Screen.*
 import com.famas.frontendtask.core.presentation.util.BottomNavItem.*
-import com.famas.frontendtask.core.util.Constants
 import com.famas.frontendtask.core.util.Constants.AUTH_SCREEN
-import com.famas.frontendtask.feature_auth.presentation.AuthScreen
+import com.famas.frontendtask.core.util.Constants.SPLASH_SCREEN
+import com.famas.frontendtask.feature_auth.presentation.screen_auth.AuthScreen
+import com.famas.frontendtask.feature_auth.presentation.screen_splash.SplashScreen
 import com.famas.frontendtask.feature_dash_board.presentation.DashBoardScreen
 import com.famas.frontendtask.feature_face_auth.presentation.CameraPreviewScreen
 import com.famas.frontendtask.feature_hrms.presentation.HRMS
@@ -41,16 +41,31 @@ fun MainNavHost(
     scaffoldState: ScaffoldState
 ) {
     val scope = rememberCoroutineScope()
+
     AnimatedNavHost(
         navController = navController,
-        startDestination = AUTH_SCREEN,
+        startDestination = SPLASH_SCREEN,
         modifier = modifier
     ) {
+
+        composable(SPLASH_SCREEN) {
+            SplashScreen(
+                onNavigate = {
+                    navController.navigate(it) {
+                        popUpTo(it)
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
 
         composable(AUTH_SCREEN) {
             AuthScreen(
                 navigate = {
-                    navController.navigate(it)
+                    navController.navigate(it) {
+                        popUpTo(it)
+                        launchSingleTop = true
+                    }
                 },
                 showSnackBar = {
                     scope.launch {
@@ -61,9 +76,7 @@ fun MainNavHost(
         }
 
         composable(DashBoard.route) {
-            DashBoardScreen(scaffoldState) {
-                navController.navigate(it)
-            }
+            DashBoardScreen(scaffoldState, navController)
         }
 
         composable(ManualAttendance.route) {

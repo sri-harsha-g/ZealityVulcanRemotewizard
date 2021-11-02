@@ -1,7 +1,7 @@
 package com.famas.frontendtask.feature_manual_attendence.data.repository
 
 import android.util.Log
-import com.famas.frontendtask.core.util.Response
+import com.famas.frontendtask.core.data.Response
 import com.famas.frontendtask.feature_manual_attendence.data.remote.ManualAttendanceApi
 import com.famas.frontendtask.feature_manual_attendence.data.remote.request.AttendanceRequest
 import com.famas.frontendtask.feature_manual_attendence.data.remote.request.UpdateLocationRequest

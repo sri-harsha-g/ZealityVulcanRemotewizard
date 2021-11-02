@@ -6,14 +6,12 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.feature_auth.presentation.EnterAnimationInterval
+import com.famas.frontendtask.feature_auth.presentation.util.EnterAnimationInterval
 
 @ExperimentalAnimationApi
 @Composable

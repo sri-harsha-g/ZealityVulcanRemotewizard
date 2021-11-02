@@ -20,8 +20,8 @@ private val LightColorPalette = lightColors(
 */
 
 private val LightColorPalette = lightColors(
-    primary = Orange700,
-    secondary = Teal200,
+    primary = IndustrialBlue,
+    secondary = IndustrialBlueSec,
     background = Color.White,
     surface = Color.White,
     onPrimary = Color.White,

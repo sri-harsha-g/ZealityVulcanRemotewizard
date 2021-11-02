@@ -3,7 +3,7 @@ package com.famas.frontendtask.feature_dash_board.data.remote.response
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class DashboardData(
     @SerializedName("branch_name")
     val branchName: String,
     @SerializedName("department_name")

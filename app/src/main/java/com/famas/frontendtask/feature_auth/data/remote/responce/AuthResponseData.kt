@@ -3,7 +3,7 @@ package com.famas.frontendtask.feature_auth.data.remote.responce
 
 import com.google.gson.annotations.SerializedName
 
-data class Data(
+data class AuthResponseData(
     @SerializedName("user_id")
     val userId: String,
     @SerializedName("user_name")

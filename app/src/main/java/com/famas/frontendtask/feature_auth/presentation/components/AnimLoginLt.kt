@@ -1,9 +1,7 @@
 package com.famas.frontendtask.feature_auth.presentation.components
 
-import android.text.LoginFilter
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
@@ -23,9 +21,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSmall
-import com.famas.frontendtask.feature_auth.presentation.EnterAnimationInterval
-import com.famas.frontendtask.feature_auth.presentation.LoginState
+import com.famas.frontendtask.feature_auth.presentation.util.EnterAnimationInterval
+import com.famas.frontendtask.feature_auth.presentation.util.LoginState
 
 @ExperimentalAnimationApi
 @Composable

@@ -1,5 +1,6 @@
 package com.famas.frontendtask.tracking_service
 import android.annotation.SuppressLint
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -10,7 +11,9 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
@@ -29,6 +32,7 @@ import com.famas.frontendtask.core.util.Constants.NOTIFICATION_CHANNEL_ID
 import com.famas.frontendtask.core.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.famas.frontendtask.core.util.Constants.NOTIFICATION_ID
 import com.famas.frontendtask.core.util.hasLocationPermissions
+import com.famas.frontendtask.core.util.isGpsEnabled
 import com.famas.frontendtask.feature_manual_attendence.data.remote.request.UpdateLocationRequest
 import com.famas.frontendtask.feature_manual_attendence.domain.repository.AttendanceRepository
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -38,6 +42,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class TrackingService : LifecycleService() {
 
     var isFirstRun = true
@@ -70,13 +76,8 @@ class TrackingService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
-                    if(isFirstRun) {
-                        startForegroundService()
-                        isFirstRun = false
-                    } else {
-                        Log.d("myTag","resuming service")
-                        isTracking.postValue(true)
-                    }
+
+                    startOrResumeService()
                 }
 
                 ACTION_PAUSE_SERVICE -> {
@@ -86,11 +87,7 @@ class TrackingService : LifecycleService() {
                 }
 
                 ACTION_STOP_SERVICE -> {
-                    isFirstRun = true
-                    pauseService()
-                    fusedLocationProviderClient.removeLocationUpdates(locationCallback)
-                    stopForeground(true)
-                    stopSelf()
+                    stopService()
                 }
                 else -> {}
             }
@@ -98,8 +95,26 @@ class TrackingService : LifecycleService() {
         return super.onStartCommand(intent, flags, startId)
     }
 
+    private fun startOrResumeService() {
+        if(isFirstRun) {
+            startForegroundService()
+            isFirstRun = false
+        } else {
+            Log.d("myTag","resuming service")
+            isTracking.postValue(true)
+        }
+    }
+
     private fun pauseService() {
         isTracking.postValue(false)
+    }
+
+    private fun stopService() {
+        isFirstRun = true
+        pauseService()
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
+        stopForeground(true)
+        stopSelf()
     }
 
     @SuppressLint("MissingPermission")
@@ -162,11 +177,20 @@ class TrackingService : LifecycleService() {
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
 
         latestLocation.observe(this, {
-            val notification = notificationBuilder.setContentTitle("lat:${it.latitude} lon:${it.longitude}")
-            notificationManager.notify(NOTIFICATION_ID, notification.build())
-            /*lifecycleScope.launch {
-                attendanceRepository.updateUserLocation(UpdateLocationRequest(userId = "user_id", latitude = "${it.latitude}", longitude = "${it.longitude}", time = "${it.time}"))
-            }*/
+            if (isGpsEnabled(this)) {
+                try {
+                    val notification = notificationBuilder.setContentTitle("lat:${it.latitude} lon:${it.longitude}")
+                    notificationManager.notify(NOTIFICATION_ID, notification.build())
+                    /*lifecycleScope.launch {
+                        attendanceRepository.updateUserLocation(UpdateLocationRequest(userId = "user_id", latitude = "${it.latitude}", longitude = "${it.longitude}", time = "${it.time}"))
+                    }*/
+                }
+                catch (e: Exception) {
+                    if (!isGpsEnabled(this)) {
+                        stopService()
+                    }
+                }
+            }
         })
     }
 

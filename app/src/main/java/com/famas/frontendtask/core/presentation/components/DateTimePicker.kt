@@ -1,6 +1,8 @@
 package com.famas.frontendtask.core.presentation.components
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,13 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import com.famas.frontendtask.core.ui.theme.*
+import okhttp3.internal.http.toHttpDateString
 import java.util.*
 
 @Composable
-fun DatePicker(
+fun DateTimePicker(
     modifier: Modifier = Modifier,
     title: String? = null,
-    btnTxt: String = "Pick date",
+    btnTxt: String = "Pick date & time",
     selectedDate: String,
     setDate: (String) -> Unit
 ) {
@@ -32,20 +35,31 @@ fun DatePicker(
         title?.let {
             Text(text = it, style = MaterialTheme.typography.subtitle1)
         }
+        EmphasisText(text = "format:YYYY-MM-dd HH:MM", style = MaterialTheme.typography.caption)
 
         PrimaryButton(
             text = btnTxt,
             icon = Icons.Default.CalendarToday,
             color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
             textColor = Color.Black,
-            modifier = Modifier.fillMaxWidth().padding(SpaceMedium),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SpaceMedium),
             shape = QuarterCornerShape,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             DatePickerDialog(
                 context,
-                { _, i, i2, i3 ->
-                    setDate("selected date: $i3-$i2-$i")
+                { _, year, month, date ->
+                    TimePickerDialog(
+                        context,
+                        { _, h, m ->
+                            setDate("selected date: $year-${month.formatDateDigit()}-${date.formatDateDigit()} ${h.formatDateDigit()}:${m.formatDateDigit()}")
+                        },
+                        calendar[Calendar.HOUR_OF_DAY],
+                        calendar[Calendar.MINUTE],
+                        true,
+                    ).show()
                 },
                 calendar.get(Calendar.YEAR),
                 calendar[Calendar.MONTH],
@@ -60,3 +74,6 @@ fun DatePicker(
     }
 
 }
+
+
+fun Int.formatDateDigit(): String = if (this<10) "0$this" else "$this"

@@ -1,7 +1,7 @@
 package com.famas.frontendtask.feature_requests.data.repository
 
 import android.util.Log
-import com.famas.frontendtask.core.util.Response
+import com.famas.frontendtask.core.data.Response
 import com.famas.frontendtask.feature_manual_attendence.data.remote.response.BasicResponse
 import com.famas.frontendtask.feature_requests.data.remote.RequestsApi
 import com.famas.frontendtask.feature_requests.data.remote.request.PermissionRequest

@@ -1,4 +1,4 @@
-package com.famas.frontendtask.feature_auth.presentation
+package com.famas.frontendtask.feature_auth.presentation.util
 
 data class LoginState(
     val loading: Boolean = false,

@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 
 data class DashBoardResponse(
     @SerializedName("data")
-    val `data`: List<Data>,
+    val `data`: List<DashboardData>,
     @SerializedName("msg")
     val msg: String,
     @SerializedName("status")

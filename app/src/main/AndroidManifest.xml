@@ -16,7 +16,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FrontendTask">
+        android:theme="@style/Theme.FrontendTask"
+        android:usesCleartextTraffic="true">
+
         <activity
             android:name=".core.presentation.MainActivity"
             android:exported="true"

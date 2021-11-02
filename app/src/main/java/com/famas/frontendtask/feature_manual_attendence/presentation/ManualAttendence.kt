@@ -1,25 +1,17 @@
 package com.famas.frontendtask.feature_manual_attendence.presentation
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.famas.frontendtask.R
-import com.famas.frontendtask.core.presentation.components.DatePicker
+import com.famas.frontendtask.core.presentation.components.DateTimePicker
 import com.famas.frontendtask.core.presentation.components.DropDown
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
-import com.famas.frontendtask.core.presentation.components.TimePicker
-import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
-import kotlinx.coroutines.launch
 
 @Composable
 fun ManualAttendance() {
@@ -60,13 +52,13 @@ fun ManualAttendance() {
                 hint = "Employee"
             )
 
-            DatePicker(
-                title = "Select date for attendance",
+            DateTimePicker(
+                title = "Select date and time",
                 selectedDate = selectedDate,
                 setDate = { selectedDate = it }
             )
 
-            Spacer(modifier = Modifier.height(SpaceSemiLarge))
+            /*Spacer(modifier = Modifier.height(SpaceSemiLarge))
             TimePicker(
                 title = "Select time for attendance",
                 selectedTime = selectedTime,
@@ -76,7 +68,7 @@ fun ManualAttendance() {
                         lazyListState.animateScrollToItem(1)
                     }
                 }
-            )
+            )*/
         }
 
         item {
@@ -89,6 +81,8 @@ fun ManualAttendance() {
 
                 }
             }
+            Spacer(modifier = Modifier.height(SpaceMedium))
+
         }
     }
 }

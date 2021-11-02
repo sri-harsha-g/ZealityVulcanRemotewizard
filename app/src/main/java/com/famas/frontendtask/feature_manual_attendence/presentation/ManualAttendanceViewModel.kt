@@ -6,6 +6,4 @@ import javax.inject.Inject
 
 class ManualAttendanceViewModel @Inject constructor(
     private val placeAttendanceUseCase: PlaceAttendanceUseCase
-): ViewModel() {
-
-}
+): ViewModel()

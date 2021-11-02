@@ -1,5 +1,8 @@
 package com.famas.frontendtask.di
 
+import android.app.Application
+import com.famas.frontendtask.core.data.local.datastore.Datastore
+import com.google.android.gms.location.LocationRequest
 import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
@@ -16,4 +19,9 @@ object MainModule {
     @Singleton
     fun provideGson(): Gson = Gson()
 
+    @Provides
+    @Singleton
+    fun provideDatastore(application: Application): Datastore {
+        return Datastore(application)
+    }
 }

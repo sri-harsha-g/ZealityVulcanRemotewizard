@@ -13,8 +13,8 @@ interface RequestsApi {
     ): BasicResponse
 
 
-    @POST("getrequests.php/")
+    @POST("getrequests.php")
     suspend fun getRequests(
-        @Body userId: String
+        @Body user_id: String
     ): RequestsResponse
 }

@@ -52,7 +52,7 @@ fun NavigationDrawer(
 @Composable
 fun DrawerItem(screen: Screen, isSelected: Boolean, onItemClick: () -> Unit) {
     val animatedColor =
-        animateColorAsState(targetValue = if (isSelected) Orange700 else Color.White)
+        animateColorAsState(targetValue = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.2f) else Color.White)
     Row(
         modifier = Modifier
             .fillMaxWidth()

@@ -1,21 +1,17 @@
 package com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.famas.frontendtask.core.presentation.components.DatePicker
+import com.famas.frontendtask.core.presentation.components.DateTimePicker
 import com.famas.frontendtask.core.presentation.components.DropDown
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
-import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import kotlinx.coroutines.launch
@@ -55,14 +51,14 @@ fun LeaveVacationRequest() {
             )
 
             Spacer(modifier = Modifier.height(SpaceMedium))
-            DatePicker(
-                title = "Select from date",
+            DateTimePicker(
+                title = "Select from date and time",
                 selectedDate = fromDate,
                 setDate = { fromDate = it })
 
             Spacer(modifier = Modifier.height(SpaceMedium))
-            DatePicker(
-                title = "Select to date",
+            DateTimePicker(
+                title = "Select to date and time",
                 selectedDate = toDate,
                 setDate = { toDate = it })
 
@@ -86,8 +82,7 @@ fun LeaveVacationRequest() {
         }
 
         item {
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            PrimaryButton(text = "APPLY") {
+            PrimaryButton(text = "APPLY", modifier = Modifier.padding(horizontal = SpaceMedium)) {
 
             }
         }

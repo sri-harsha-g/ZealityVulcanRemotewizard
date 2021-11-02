@@ -2,6 +2,7 @@ package com.famas.frontendtask.core.util
 
 object Constants {
 
+    const val DATASTORE_NAME: String = "_datastore_preferences"
     const val ALPHA_FOR_PRIMARY = 0.2f
     const val SCREEN_SLIDE_DURATION = 500
 
@@ -21,6 +22,7 @@ object Constants {
 
     //screens need not to be in Screen class
     const val AUTH_SCREEN = "screen_auth"
+    const val SPLASH_SCREEN = "screen_splash"
 
 
     //Retrofit
