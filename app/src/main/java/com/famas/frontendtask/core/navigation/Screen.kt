@@ -14,7 +14,7 @@ sealed class Screen(
     val getRoute: (String) -> String = { route }
 ) {
     object DashBoard : Screen(
-        "_dash_board/{$NAV_USER_ID}",
+        "_dash_board/{$USER_ID}",
         "DashBoard",
         { if (it) Icons.Filled.Dashboard else Icons.Default.Dashboard },
         getRoute = { "_dash_board/$it" })
@@ -59,7 +59,7 @@ sealed class Screen(
 
 
     companion object {
-        const val NAV_USER_ID = "user_id"
+        const val USER_ID = "user_id"
     }
 }
 

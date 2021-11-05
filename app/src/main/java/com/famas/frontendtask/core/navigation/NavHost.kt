@@ -19,7 +19,7 @@ import com.famas.frontendtask.feature_dash_board.presentation.DashBoardScreen
 import com.famas.frontendtask.feature_face_auth.presentation.CameraPreviewScreen
 import com.famas.frontendtask.feature_hrms.presentation.HRMS
 import com.famas.frontendtask.feature_id_card.presentation.IDCardScreen
-import com.famas.frontendtask.feature_manual_attendence.presentation.ManualAttendance
+import com.famas.frontendtask.feature_manual_attendence.presentation.ManualAttendanceScreen
 import com.famas.frontendtask.feature_payslips.presentation.PayslipsScreen
 import com.famas.frontendtask.feature_reports.presentation.ReportsScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation.LeaveVacationRequest
@@ -80,7 +80,7 @@ fun MainNavHost(
         }
 
         composable(ManualAttendance.route) {
-            ManualAttendance()
+            ManualAttendanceScreen(navController = navController, scaffoldState = scaffoldState)
         }
 
         composable(HRMS.route) {
@@ -127,7 +127,7 @@ fun MainNavHost(
                 )
             }
         ) {
-            LeaveVacationRequest()
+            LeaveVacationRequest(navController = navController, scaffoldState = scaffoldState)
         }
 
         composable(PendingRequests.route) {

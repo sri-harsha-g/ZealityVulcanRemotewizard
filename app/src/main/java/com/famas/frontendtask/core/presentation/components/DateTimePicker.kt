@@ -23,7 +23,7 @@ fun DateTimePicker(
     modifier: Modifier = Modifier,
     title: String? = null,
     btnTxt: String = "Pick date & time",
-    selectedDate: String,
+    selectedDate: String?,
     setDate: (String) -> Unit
 ) {
     val calendar = remember {
@@ -54,7 +54,7 @@ fun DateTimePicker(
                     TimePickerDialog(
                         context,
                         { _, h, m ->
-                            setDate("selected date: $year-${month.formatDateDigit()}-${date.formatDateDigit()} ${h.formatDateDigit()}:${m.formatDateDigit()}")
+                            setDate("$year-${month.formatDateDigit()}-${date.formatDateDigit()} ${h.formatDateDigit()}:${m.formatDateDigit()}")
                         },
                         calendar[Calendar.HOUR_OF_DAY],
                         calendar[Calendar.MINUTE],
@@ -67,7 +67,7 @@ fun DateTimePicker(
             ).show()
         }
         EmphasisText(
-            text = selectedDate,
+            text = "Select date and time: ${selectedDate ?: ""}",
             modifier = Modifier.padding(start = SpaceSemiLarge),
             style = MaterialTheme.typography.h5
         )

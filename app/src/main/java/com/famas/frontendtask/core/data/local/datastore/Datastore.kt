@@ -13,13 +13,13 @@ class Datastore(
 ) {
     private val Context.datastore by preferencesDataStore(Constants.DATASTORE_NAME)
 
-    suspend fun insertString(stringPrefKey: Preferences.Key<String>, value: String) {
+    suspend fun storeString(stringPrefKey: Preferences.Key<String>, value: String) {
         context.datastore.edit {
             it[stringPrefKey] = value
         }
     }
 
-    suspend fun insertInt(intPrefKey: Preferences.Key<Int>, value: Int) {
+    suspend fun storeInt(intPrefKey: Preferences.Key<Int>, value: Int) {
         context.datastore.edit {
             it[intPrefKey] = value
         }

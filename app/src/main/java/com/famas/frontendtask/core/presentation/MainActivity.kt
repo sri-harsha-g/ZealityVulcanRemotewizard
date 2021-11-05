@@ -187,21 +187,31 @@ class MainActivity : ComponentActivity() {
                 contract = ActivityResultContracts.RequestMultiplePermissions(),
                 onResult = {
                     when {
-                        it.getOrDefault(Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                        it.getOrElse(Manifest.permission.ACCESS_FINE_LOCATION, { false }) -> {
                             // Precise location access granted.
                             Log.d("myTag", "Precise location access granted")
                             if (!isGpsEnabled(this@MainActivity)) {
-                                Toast.makeText(this@MainActivity, "Please turn on location", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Please turn on location",
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                             }
+                            else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
                         }
-                        it.getOrDefault(Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                        it.getOrElse(Manifest.permission.ACCESS_COARSE_LOCATION, { false }) -> {
                             // Only approximate location access granted.
                             Log.d("myTag", "Only approximate location access granted")
                             if (!isGpsEnabled(this@MainActivity)) {
-                                Toast.makeText(this@MainActivity, "Please turn on location", Toast.LENGTH_LONG).show()
+                                Toast.makeText(
+                                    this@MainActivity,
+                                    "Please turn on location",
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                             }
+                            else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
                         }
                         else -> {
                             // No location access granted.
@@ -230,9 +240,12 @@ class MainActivity : ComponentActivity() {
                 if (showGestures && !isTracking && hasLocationPermissions(this@MainActivity)) {
                     if (isGpsEnabled(this@MainActivity)) {
                         sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
-                    }
-                    else {
-                        Toast.makeText(this@MainActivity, "Please turn on location", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Please turn on location",
+                            Toast.LENGTH_LONG
+                        ).show()
                         delay(1000L)
                         startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
                     }
@@ -255,6 +268,5 @@ class MainActivity : ComponentActivity() {
 
     override fun onBackPressed() {
         navController.navigateUp()
-        super.onBackPressed()
     }
 }

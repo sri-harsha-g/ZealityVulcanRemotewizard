@@ -49,7 +49,7 @@ fun AuthScreen(
 
     val state = viewModel.loginState.value
     val lottieEnterTransition = fadeIn(
-        animationSpec = tween(1000, EnterAnimationInterval.SECOND.time)
+        animationSpec = tween(1500, EnterAnimationInterval.SECOND.time)
     )
 
     LazyColumn(

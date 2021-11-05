@@ -1,6 +1,6 @@
 package com.famas.frontendtask.tracking_service
+
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.NotificationManager.IMPORTANCE_LOW
@@ -11,9 +11,7 @@ import android.content.Intent
 import android.location.Location
 import android.os.Build
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.ExperimentalMaterialApi
@@ -22,6 +20,7 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import com.famas.frontendtask.R
+import com.famas.frontendtask.core.navigation.Screen.Companion.USER_ID
 import com.famas.frontendtask.core.presentation.MainActivity
 import com.famas.frontendtask.core.util.Constants.ACTION_PAUSE_SERVICE
 import com.famas.frontendtask.core.util.Constants.ACTION_START_OR_RESUME_SERVICE
@@ -33,7 +32,8 @@ import com.famas.frontendtask.core.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.famas.frontendtask.core.util.Constants.NOTIFICATION_ID
 import com.famas.frontendtask.core.util.hasLocationPermissions
 import com.famas.frontendtask.core.util.isGpsEnabled
-import com.famas.frontendtask.feature_manual_attendence.data.remote.request.UpdateLocationRequest
+import com.famas.frontendtask.core.util.isNetworkAvailable
+import com.famas.frontendtask.feature_auth.domain.use_cases.GetUserId
 import com.famas.frontendtask.feature_manual_attendence.domain.repository.AttendanceRepository
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.android.gms.location.*
@@ -47,11 +47,15 @@ import javax.inject.Inject
 class TrackingService : LifecycleService() {
 
     var isFirstRun = true
+    var userId: String? = null
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Inject
     lateinit var attendanceRepository: AttendanceRepository
+
+    @Inject
+    lateinit var getUserId: GetUserId
 
     companion object {
         val isTracking = MutableLiveData<Boolean>()
@@ -65,7 +69,8 @@ class TrackingService : LifecycleService() {
     override fun onCreate() {
         super.onCreate()
         postInitialValues()
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(applicationContext)
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(applicationContext)
 
         isTracking.observe(this, {
             updateLocationTracking(it)
@@ -76,12 +81,12 @@ class TrackingService : LifecycleService() {
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
-
-                    startOrResumeService()
+                    lifecycleScope.launch { userId = getUserId() }
+                    startOrResumeService(intent)
                 }
 
                 ACTION_PAUSE_SERVICE -> {
-                    Log.d("myTag","paused service")
+                    Log.d("myTag", "paused service")
                     pauseService()
                     sendBroadcast(Intent("Never_Kill"))
                 }
@@ -89,18 +94,19 @@ class TrackingService : LifecycleService() {
                 ACTION_STOP_SERVICE -> {
                     stopService()
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId)
     }
 
-    private fun startOrResumeService() {
-        if(isFirstRun) {
+    private fun startOrResumeService(intent: Intent) {
+        if (isFirstRun) {
             startForegroundService()
             isFirstRun = false
         } else {
-            Log.d("myTag","resuming service")
+            Log.d("myTag", "resuming service")
             isTracking.postValue(true)
         }
     }
@@ -120,8 +126,8 @@ class TrackingService : LifecycleService() {
     @SuppressLint("MissingPermission")
     private fun updateLocationTracking(isTracking: Boolean) {
         Log.d("myTag", "updateLocationTracking fun is executed: $isTracking")
-        if(isTracking) {
-            if(hasLocationPermissions(this)) {
+        if (isTracking) {
+            if (hasLocationPermissions(this)) {
                 fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                     latestLocation.postValue(it)
                 }
@@ -146,11 +152,11 @@ class TrackingService : LifecycleService() {
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(result: LocationResult) {
             super.onLocationResult(result)
-            if(isTracking.value!!) {
+            if (isTracking.value!!) {
                 result.locations.let { locations ->
                     locations.forEach {
                         latestLocation.postValue(it)
-                        Log.d("myTag","NEW LOCATION: ${it.latitude}, ${it.longitude}")
+                        Log.d("myTag", "NEW LOCATION: ${it.latitude}, ${it.longitude}")
                     }
                 }
             }
@@ -163,7 +169,7 @@ class TrackingService : LifecycleService() {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE)
                 as NotificationManager
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager)
         }
 
@@ -176,16 +182,27 @@ class TrackingService : LifecycleService() {
 
         startForeground(NOTIFICATION_ID, notificationBuilder.build())
 
-        latestLocation.observe(this, {
+        latestLocation.observe(this, { location ->
             if (isGpsEnabled(this)) {
                 try {
-                    val notification = notificationBuilder.setContentTitle("lat:${it.latitude} lon:${it.longitude}")
+                    val notification =
+                        notificationBuilder.setContentTitle("lat:${location.latitude} lon:${location.longitude}")
                     notificationManager.notify(NOTIFICATION_ID, notification.build())
+                    Log.d(
+                        "myTag",
+                        "network connection status: ${if (isNetworkAvailable(this)) "active" else "inactive"}"
+                    )
+                    lifecycleScope.launch {
+                        userId?.let {
+                            Log.d("myTag", "user id in service: $it")
+                        } ?: kotlin.run {
+                            userId = getUserId()
+                        }
+                    }
                     /*lifecycleScope.launch {
                         attendanceRepository.updateUserLocation(UpdateLocationRequest(userId = "user_id", latitude = "${it.latitude}", longitude = "${it.longitude}", time = "${it.time}"))
                     }*/
-                }
-                catch (e: Exception) {
+                } catch (e: Exception) {
                     if (!isGpsEnabled(this)) {
                         stopService()
                     }
@@ -194,7 +211,11 @@ class TrackingService : LifecycleService() {
         })
     }
 
-    @OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
+    @OptIn(
+        ExperimentalAnimationApi::class,
+        ExperimentalPagerApi::class,
+        ExperimentalMaterialApi::class
+    )
     private fun getMainActivityPendingIntent() = PendingIntent.getActivity(
         this,
         0,

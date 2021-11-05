@@ -6,4 +6,19 @@
     <string name="request_btn_txt">REQUEST</string>
     <string name="select_date_manual_attendence">select date for attendence</string>
     <string name="except_cam_perm">Please accept camera permission</string>
+    <string name="select_date_time">Select date and time</string>
+    <string name="select_perm_type">Select permission type</string>
+    <string name="perm_type">permission type</string>
+    <string name="reson">Reason</string>
+    <string name="apply_btn_txt">APPLY</string>
+    <string name="selected_date">selected date:</string>
+    <string name="pick_hours">Pick the required hours</string>
+    <string name="pick_minutes">Pick the required minutes</string>
+    <string name="select_department">Please select department</string>
+    <string name="select_employee">Please select Employee</string>
+    <string name="department">Department</string>
+    <string name="employee">Employee</string>
+    <string name="btn_clock_in_txt">Clock-In</string>
+    <string name="btn_clock_out_txt">Clock-Out</string>
+    <string name="something_went_wrong">Something went wrong</string>
 </resources>

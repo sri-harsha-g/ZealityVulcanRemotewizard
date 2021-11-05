@@ -13,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,12 +24,14 @@ import com.famas.frontendtask.core.ui.theme.SpaceSmall
 @Composable
 fun DropDown(
     modifier: Modifier = Modifier,
+    list: List<String>,
+    selectedIndex: Int,
+    onSelected: (Int) -> Unit,
     heading: String,
     hint: String
 ) {
+    var notYetSelected by rememberSaveable { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
-    var selectedItem by remember { mutableStateOf("") }
-
     val rotation = if (expanded) 180f else 0f
     Column {
         Text(text = heading, style = MaterialTheme.typography.subtitle1)
@@ -41,7 +44,7 @@ fun DropDown(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = if (selectedItem.isNotBlank()) selectedItem else hint,
+                text = if (notYetSelected) hint else list[selectedIndex],
                 style = MaterialTheme.typography.button,
                 modifier = Modifier.padding(SpaceSmall)
             )
@@ -63,27 +66,14 @@ fun DropDown(
                 expanded = false
             }
         ) {
-            val items =
-                listOf(
-                    "item item 1",
-                    "item item 1",
-                    "item item 1",
-                    "item item 1",
-                    "item item 1",
-                    "item item 1",
-                    "item item 1"
-                )
-            items.forEach { item ->
-                OutlinedButton(
-                    modifier = Modifier.padding(
-                        horizontal = 4.dp,
-                        vertical = 2.dp
-                    ),
+            list.forEachIndexed { index, item ->
+                DropdownMenuItem(
                     onClick = {
+                        if (notYetSelected) notYetSelected = false
                         expanded = false
-                        selectedItem = item
+                        onSelected(index)
                     },
-                    enabled = selectedItem != item
+                    enabled = selectedIndex != index
                 ) {
                     Text(text = item)
                 }

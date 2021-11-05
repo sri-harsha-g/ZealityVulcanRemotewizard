@@ -37,8 +37,8 @@ class AuthRepositoryImpl(
     }
 
     override suspend fun saveUser(userId: String, userName: String, userType: String) {
-        datastore.insertString(DatastoreKeys.userIdKey, userId)
-        datastore.insertString(DatastoreKeys.userNameKey, userName)
-        datastore.insertString(DatastoreKeys.userTypeKey, userType)
+        datastore.storeString(DatastoreKeys.userIdKey, userId)
+        datastore.storeString(DatastoreKeys.userNameKey, userName)
+        datastore.storeString(DatastoreKeys.userTypeKey, userType)
     }
 }

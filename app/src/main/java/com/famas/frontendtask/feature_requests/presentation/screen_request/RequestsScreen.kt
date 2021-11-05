@@ -91,6 +91,7 @@ fun RequestScreen(
                             Text(text = "APPROVE")
                         }
                     }
+                    Spacer(modifier = Modifier.height(SpaceMedium))
                 }
             }
         }

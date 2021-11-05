@@ -1,5 +1,6 @@
 package com.famas.frontendtask.feature_dash_board.presentation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
@@ -12,18 +13,43 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.famas.frontendtask.core.presentation.components.EmphasisText
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
+import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @Composable
 fun DashBoardScreen(
     scaffoldState: ScaffoldState,
     navController: NavController,
-    dashboardViewModel: DashboardViewModel = hiltViewModel()
+    viewModel: DashboardViewModel = hiltViewModel()
 ) {
     val coroutine = rememberCoroutineScope()
-    val context = LocalContext.current
 
-    val state = dashboardViewModel.dashboardState.value
+    LaunchedEffect(key1 = true, block = {
+        viewModel.uiEventFlow.collectLatest { event ->
+            when(event) {
+                is UiEvent.ShowSnackBar -> {
+                    coroutine.launch {
+                        event.actionLabel?.let {
+                            val result = scaffoldState.snackbarHostState.showSnackbar(event.message, it, duration = SnackbarDuration.Indefinite)
+                            if (result == SnackbarResult.ActionPerformed) {
+                                viewModel.onEvent(DashboardEvent.OnRetry)
+                            }
+                        } ?: kotlin.run {
+                            scaffoldState.snackbarHostState.showSnackbar(event.message)
+                        }
+                    }
+                }
+                is UiEvent.OnNavigate -> {
+                    navController.navigate(event.route)
+                }
+            }
+        }
+    })
+
+    val state = viewModel.dashboardState.value
     val data = state.source?.data?.first()
     val hoursSummary = data?.hoursSummary?.first()
 
@@ -69,9 +95,7 @@ fun DashBoardScreen(
 
             Card(modifier = Modifier.fillMaxWidth()) {
                 Column(
-                    modifier = Modifier
-                        .height(150.dp)
-                        .padding(SpaceSemiLarge)
+                    modifier = Modifier.padding(SpaceSemiLarge)
                 ) {
                     EmphasisText(text = "WORKING HOURS")
                     Spacer(modifier = Modifier.height(SpaceSemiSmall))
@@ -96,24 +120,6 @@ fun DashBoardScreen(
                     Text(text = "Summary", style = MaterialTheme.typography.h5)
                 }
             }
-
-            //Spacer(modifier = Modifier.weight(1f))
-
-            /*EmphasisText(
-                text = "BRANCH:",
-                modifier = Modifier.padding(horizontal = SpaceSemiSmall),
-                style = MaterialTheme.typography.h5
-            )
-            EmphasisText(
-                text = "DEPARTMENT:",
-                modifier = Modifier.padding(horizontal = SpaceSemiSmall),
-                style = MaterialTheme.typography.h5
-            )
-            EmphasisText(
-                text = "DESIGNATION:",
-                modifier = Modifier.padding(horizontal = SpaceSemiSmall),
-                style = MaterialTheme.typography.h5
-            )*/
 
             if (state.loading) {
                 Dialog(onDismissRequest = { /*TODO*/ }) {
