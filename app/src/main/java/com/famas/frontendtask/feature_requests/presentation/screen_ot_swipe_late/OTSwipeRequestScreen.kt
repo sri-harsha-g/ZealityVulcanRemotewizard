@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -22,7 +24,6 @@ import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
-import com.famas.frontendtask.feature_manual_attendence.presentation.MAttendanceEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -52,7 +53,7 @@ fun OTSwipeLateRequestScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(SpaceSemiLarge),
+            .padding(horizontal = SpaceSemiLarge),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState
@@ -82,7 +83,10 @@ fun OTSwipeLateRequestScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(R.string.pick_hours), style = MaterialTheme.typography.subtitle1)
+                Text(
+                    text = stringResource(R.string.pick_hours),
+                    style = MaterialTheme.typography.subtitle1
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     NumberPicker(
                         list = state.hoursPicker.list,
@@ -101,7 +105,10 @@ fun OTSwipeLateRequestScreen(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(R.string.pick_minutes), style = MaterialTheme.typography.subtitle1)
+                Text(
+                    text = stringResource(R.string.pick_minutes),
+                    style = MaterialTheme.typography.subtitle1
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     NumberPicker(
                         list = state.minutesPicker.list,

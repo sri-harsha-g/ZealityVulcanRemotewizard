@@ -4,7 +4,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.famas.frontendtask.core.presentation.util.UiEvent
-import com.famas.frontendtask.feature_dash_board.presentation.DashboardEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,7 +20,7 @@ class LeaveVacationViewModel @Inject constructor(
     val leaveVacationState: State<LeaveVacationState> = _leaveVacationState
 
     fun onEvent(event: LeaveVacationEvent) {
-        when(event) {
+        when (event) {
             is LeaveVacationEvent.OnSelectFromDate -> {
                 _leaveVacationState.value = leaveVacationState.value.copy(fromDate = event.date)
             }
@@ -32,7 +31,9 @@ class LeaveVacationViewModel @Inject constructor(
 
             is LeaveVacationEvent.OnSelectPermType -> {
                 _leaveVacationState.value = leaveVacationState.value.copy(
-                    permissionDDState = leaveVacationState.value.permissionDDState.copy(selectedIndex = event.index)
+                    permissionDDState = leaveVacationState.value.permissionDDState.copy(
+                        selectedIndex = event.index
+                    )
                 )
             }
 

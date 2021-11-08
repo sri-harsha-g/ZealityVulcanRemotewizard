@@ -1,7 +1,6 @@
 package com.famas.frontendtask.feature_requests.data.remote.request
 
 import com.google.gson.annotations.SerializedName
-import java.sql.Timestamp
 
 data class PermissionRequest(
     @SerializedName("user_id")

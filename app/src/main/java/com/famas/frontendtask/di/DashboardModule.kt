@@ -36,5 +36,6 @@ object DashboardModule {
 
     @Provides
     @Singleton
-    fun provideGetDashboardUseCase(dashboardRepository: DashboardRepository): GetDashboardUseCase = GetDashboardUseCase(dashboardRepository)
+    fun provideGetDashboardUseCase(dashboardRepository: DashboardRepository): GetDashboardUseCase =
+        GetDashboardUseCase(dashboardRepository)
 }

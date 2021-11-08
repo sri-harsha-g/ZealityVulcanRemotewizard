@@ -4,11 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.util.toRange
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.famas.frontendtask.core.presentation.components.DateTimePicker
@@ -17,7 +18,6 @@ import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
-import com.famas.frontendtask.feature_dash_board.presentation.DashboardEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -61,7 +61,7 @@ fun LeaveVacationRequest(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(SpaceSemiLarge),
+            .padding(horizontal = SpaceSemiLarge),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState

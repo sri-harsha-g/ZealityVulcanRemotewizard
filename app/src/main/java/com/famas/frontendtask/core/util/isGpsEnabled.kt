@@ -8,8 +8,10 @@ fun isGpsEnabled(context: Context): Boolean {
     val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     return when {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> locationManager.isLocationEnabled
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> locationManager.isProviderEnabled(LocationManager.FUSED_PROVIDER)
-        else -> locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> locationManager.isProviderEnabled(
+            LocationManager.FUSED_PROVIDER
+        )
+        else -> locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
     }
 
     /*LocationServices.getSettingsClient(application)

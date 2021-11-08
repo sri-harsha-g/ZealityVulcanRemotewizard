@@ -1,4 +1,6 @@
 package com.famas.frontendtask.core.data.remote.responses
 
-class ThemeColorsResponse {
-}
+data class ThemeColorsResponse(
+    val primary: Long,
+    val secondary: Long
+)

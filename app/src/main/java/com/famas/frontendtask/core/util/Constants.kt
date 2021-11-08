@@ -2,6 +2,7 @@ package com.famas.frontendtask.core.util
 
 object Constants {
 
+    const val LOCATION_DATABASE_NAME: String = "_loc_database"
     const val DATASTORE_NAME: String = "_datastore_preferences"
     const val ALPHA_FOR_PRIMARY = 0.2f
     const val SCREEN_SLIDE_DURATION = 500
@@ -17,7 +18,7 @@ object Constants {
     const val NOTIFICATION_ID = 1
 
     const val LOCATION_UPDATE_INTERVAL = 5000L
-    const val FASTEST_LOCATION_UPDATE_INTERVAL = 2000L
+    const val FASTEST_LOCATION_UPDATE_INTERVAL = 3000L
 
 
     //screens need not to be in Screen class

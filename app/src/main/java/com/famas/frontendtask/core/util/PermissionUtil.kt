@@ -3,7 +3,6 @@ package com.famas.frontendtask.core.util
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import androidx.compose.runtime.remember
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 

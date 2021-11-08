@@ -1,9 +1,7 @@
 package com.famas.frontendtask.feature_face_auth.presentation
 
 import android.content.Context
-import android.net.Uri
 import android.util.Log
-import android.view.Surface.ROTATION_180
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException

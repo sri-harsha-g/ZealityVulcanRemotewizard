@@ -3,10 +3,10 @@ package com.famas.frontendtask.core.presentation.components
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
@@ -15,14 +15,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
 
 
@@ -43,20 +39,21 @@ fun NumberPicker(
         ConstraintLayout(
             modifier = modifier
                 .defaultMinSize(minHeight = 30.dp, minWidth = 30.dp)
-                .padding(SpaceSemiSmall)
                 .clip(MaterialTheme.shapes.small)
                 .background(MaterialTheme.colors.primary.copy(0.2f))
-                .clickable { expanded = true }
                 .padding(SpaceSemiSmall)
         ) {
-            val (animContentLt, upBtn, downBtn, drpDown) = createRefs()
+            val (animContentLt, upBtn, downBtn) = createRefs()
 
             AnimatedContent(
                 targetState = list[currentIndex],
-                modifier = Modifier.constrainAs(animContentLt) {
-                    start.linkTo(parent.start)
-                    centerVerticallyTo(parent)
-                },
+                modifier = Modifier
+                    .constrainAs(animContentLt) {
+                        start.linkTo(parent.start)
+                        centerVerticallyTo(parent)
+                    }
+                    .clickable { expanded = true }
+                    .padding(SpaceMedium),
                 transitionSpec = {
                     // Compare the incoming number with the previous number.
                     if (targetState > initialState) {

@@ -13,6 +13,7 @@ import com.famas.frontendtask.core.data.ResponseStatus
 import com.famas.frontendtask.core.navigation.Screen.Companion.USER_ID
 import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.feature_dash_board.domain.use_cases.GetDashboardUseCase
+import com.famas.frontendtask.feature_manual_attendence.domain.repository.AttendanceRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,6 +24,7 @@ import javax.inject.Inject
 class DashboardViewModel @Inject constructor(
     private val getDashboardUseCase: GetDashboardUseCase,
     private val savedStateHandle: SavedStateHandle,
+    attendanceRepository: AttendanceRepository,
     private val application: Application
 ) : ViewModel() {
 

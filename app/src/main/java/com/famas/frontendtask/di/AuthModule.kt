@@ -49,7 +49,8 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideStoreUserDetailsUseCase(authRepository: AuthRepository): StoreUserDetails = StoreUserDetails(authRepository)
+    fun provideStoreUserDetailsUseCase(authRepository: AuthRepository): StoreUserDetails =
+        StoreUserDetails(authRepository)
 
     @Provides
     @Singleton

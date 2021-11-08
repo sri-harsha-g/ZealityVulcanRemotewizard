@@ -15,22 +15,20 @@ import retrofit2.HttpException
 class AuthRepositoryImpl(
     private val authApi: AuthApi,
     private val datastore: Datastore
-): AuthRepository {
+) : AuthRepository {
     override suspend fun login(loginRequest: AuthRequest): Response<AuthResponse> {
         return try {
             Log.d("myTag", Gson().toJson(loginRequest))
             val response = authApi.login(loginRequest)
             Log.d("myTag", response.msg)
             Response.Success(response)
-        }
-        catch(e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage ?: "An unexpected error occurred")
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error("Couldn't reach server. Check your internet connection.")
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage)
         }

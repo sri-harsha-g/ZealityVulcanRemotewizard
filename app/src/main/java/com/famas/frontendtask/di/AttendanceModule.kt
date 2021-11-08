@@ -1,5 +1,6 @@
 package com.famas.frontendtask.di
 
+import com.famas.frontendtask.core.data.local.database.location_db.LocationDao
 import com.famas.frontendtask.core.util.Constants
 import com.famas.frontendtask.feature_manual_attendence.data.remote.ManualAttendanceApi
 import com.famas.frontendtask.feature_manual_attendence.data.repository.AttendanceRepositoryImpl
@@ -28,8 +29,11 @@ object AttendanceModule {
 
     @Provides
     @Singleton
-    fun provideAttendanceRepository(attendanceApi: ManualAttendanceApi): AttendanceRepository {
-        return AttendanceRepositoryImpl(attendanceApi)
+    fun provideAttendanceRepository(
+        attendanceApi: ManualAttendanceApi,
+        locationDao: LocationDao
+    ): AttendanceRepository {
+        return AttendanceRepositoryImpl(manualAttendanceApi = attendanceApi, locationDao = locationDao)
     }
 
     @Provides

@@ -5,7 +5,12 @@ import com.famas.frontendtask.feature_requests.domain.model.PermissionType
 
 data class LeaveVacationState(
     val loading: Boolean = false,
-    val permissionDDState: DropDownPickerState<PermissionType> = DropDownPickerState(list = listOf(PermissionType.Leave, PermissionType.Vacation)),
+    val permissionDDState: DropDownPickerState<PermissionType> = DropDownPickerState(
+        list = listOf(
+            PermissionType.Leave,
+            PermissionType.Vacation
+        )
+    ),
     val fromDate: String? = null,
     val toDate: String? = null,
     val reason: String = ""

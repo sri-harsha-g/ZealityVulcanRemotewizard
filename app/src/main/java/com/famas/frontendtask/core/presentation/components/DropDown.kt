@@ -4,10 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -33,8 +30,12 @@ fun DropDown(
     var notYetSelected by rememberSaveable { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
     val rotation = if (expanded) 180f else 0f
-    Column {
-        Text(text = heading, style = MaterialTheme.typography.subtitle1)
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = heading,
+            style = MaterialTheme.typography.subtitle1,
+            modifier = Modifier.align(Alignment.Start)
+        )
         Row(
             modifier
                 .clip(RoundedCornerShape(25))
@@ -59,23 +60,23 @@ fun DropDown(
                     ).value
                 )
             )
-        }
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            }
-        ) {
-            list.forEachIndexed { index, item ->
-                DropdownMenuItem(
-                    onClick = {
-                        if (notYetSelected) notYetSelected = false
-                        expanded = false
-                        onSelected(index)
-                    },
-                    enabled = selectedIndex != index
-                ) {
-                    Text(text = item)
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = {
+                    expanded = false
+                }
+            ) {
+                list.forEachIndexed { index, item ->
+                    DropdownMenuItem(
+                        onClick = {
+                            if (notYetSelected) notYetSelected = false
+                            expanded = false
+                            onSelected(index)
+                        },
+                        enabled = selectedIndex != index
+                    ) {
+                        Text(text = item)
+                    }
                 }
             }
         }

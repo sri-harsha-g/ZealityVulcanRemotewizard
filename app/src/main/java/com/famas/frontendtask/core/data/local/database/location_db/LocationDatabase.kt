@@ -1,4 +1,4 @@
-package com.famas.frontendtask.core.data.local.database
+package com.famas.frontendtask.core.data.local.database.location_db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

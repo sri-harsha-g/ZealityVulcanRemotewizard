@@ -12,20 +12,18 @@ import retrofit2.HttpException
 
 class RequestsRepositoryImpl(
     private val requestsApi: RequestsApi
-): RequestsRepository {
+) : RequestsRepository {
     override suspend fun placeRequest(permissionRequest: PermissionRequest): Response<BasicResponse> {
         return try {
             val result = requestsApi.placeRequest(permissionRequest)
             Response.Success(result)
-        }
-        catch(e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage ?: "An unexpected error occurred")
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error("Couldn't reach server. Check your internet connection.")
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage)
         }
@@ -36,15 +34,13 @@ class RequestsRepositoryImpl(
             requestsApi.getRequests(userId).let {
                 Response.Success(it)
             }
-        }
-        catch(e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage ?: "An unexpected error occurred")
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error("Couldn't reach server. Check your internet connection.")
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage)
         }

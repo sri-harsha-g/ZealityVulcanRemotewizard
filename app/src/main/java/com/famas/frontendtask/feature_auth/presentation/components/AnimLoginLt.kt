@@ -54,7 +54,9 @@ fun AnimLoginLt(
                 label = {
                     Text(text = "Email")
                 },
-                modifier = Modifier.fillMaxWidth().padding(vertical = SpaceMedium)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = SpaceMedium)
             )
 
             OutlinedTextField(
@@ -72,7 +74,9 @@ fun AnimLoginLt(
                     }
                 },
                 visualTransformation = if (!loginState.isPasswordVisible) PasswordVisualTransformation() else VisualTransformation.None,
-                modifier = Modifier.fillMaxWidth().padding(bottom = SpaceMedium)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = SpaceMedium)
             )
 
             Spacer(modifier = Modifier.height(SpaceLarge))

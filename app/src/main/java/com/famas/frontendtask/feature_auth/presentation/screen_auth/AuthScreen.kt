@@ -4,7 +4,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.*
@@ -15,11 +18,11 @@ import com.famas.frontendtask.core.illustrations.UserAuthAnimation
 import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
-import com.famas.frontendtask.feature_auth.presentation.util.AuthEvent.*
 import com.famas.frontendtask.feature_auth.presentation.components.AnimEnterText
 import com.famas.frontendtask.feature_auth.presentation.components.AnimLoginLt
+import com.famas.frontendtask.feature_auth.presentation.util.AuthEvent.OnChangeLoginState
+import com.famas.frontendtask.feature_auth.presentation.util.AuthEvent.OnLoginClick
 import com.famas.frontendtask.feature_auth.presentation.util.EnterAnimationInterval
-import com.famas.frontendtask.feature_auth.presentation.screen_auth.LoginViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalAnimationApi
@@ -55,7 +58,7 @@ fun AuthScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(SpaceSemiLarge)
+            .padding(horizontal = SpaceSemiLarge)
     ) {
         item {
             AnimEnterText(visible)

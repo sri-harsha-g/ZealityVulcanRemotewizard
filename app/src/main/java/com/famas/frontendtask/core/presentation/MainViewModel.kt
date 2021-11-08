@@ -2,26 +2,22 @@ package com.famas.frontendtask.core.presentation
 
 import android.app.Application
 import android.content.Intent
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.famas.frontendtask.core.navigation.Screen.Companion.USER_ID
+import com.famas.frontendtask.core.data.Response
+import com.famas.frontendtask.core.data.local.datastore.Datastore
+import com.famas.frontendtask.core.data.remote.responses.ThemeColorsResponse
+import com.famas.frontendtask.core.domain.repository.ThemingRepository
 import com.famas.frontendtask.core.util.Constants
 import com.famas.frontendtask.core.util.hasLocationPermissions
 import com.famas.frontendtask.core.util.isGpsEnabled
-import com.famas.frontendtask.feature_auth.domain.use_cases.GetUserId
 import com.famas.frontendtask.tracking_service.TrackingService
-import com.google.android.gms.location.LocationRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val application: Application
+    private val application: Application,
+    private val themingRepository: ThemingRepository
 ) : ViewModel() {
 
     //Managing permissions and starting service
@@ -33,6 +29,15 @@ class MainViewModel @Inject constructor(
                 it.action = Constants.ACTION_START_OR_RESUME_SERVICE
                 application.startService(it)
             }
+        }
+    }
+
+    suspend fun fetchColors(): ThemeColorsResponse {
+        val sampleColors = ThemeColorsResponse(0xFFF45B49, 0xFF4A6363)
+        return when(val response = themingRepository.getColors()) {
+            is Response.Success -> response.source ?: sampleColors
+
+            is Response.Error -> sampleColors
         }
     }
 }

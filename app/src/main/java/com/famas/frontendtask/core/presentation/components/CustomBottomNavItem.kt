@@ -53,11 +53,11 @@ fun RowScope.StandardBottomNavItem(
                             drawLine(
                                 color = if (selected) selectedColor else unselectedColor,
                                 start = Offset(
-                                    x = size.width / 2f - lineLength.value * size.width/4f,
+                                    x = size.width / 2f - lineLength.value * size.width / 4f,
                                     y = size.height
                                 ),
                                 end = Offset(
-                                    x = size.width / 2f + lineLength.value * size.width/4f,
+                                    x = size.width / 2f + lineLength.value * size.width / 4f,
                                     y = size.height
                                 ),
                                 strokeWidth = 4.dp.toPx(),

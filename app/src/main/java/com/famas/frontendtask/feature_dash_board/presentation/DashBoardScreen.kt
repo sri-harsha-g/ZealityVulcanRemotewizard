@@ -4,9 +4,10 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -29,11 +30,15 @@ fun DashBoardScreen(
 
     LaunchedEffect(key1 = true, block = {
         viewModel.uiEventFlow.collectLatest { event ->
-            when(event) {
+            when (event) {
                 is UiEvent.ShowSnackBar -> {
                     coroutine.launch {
                         event.actionLabel?.let {
-                            val result = scaffoldState.snackbarHostState.showSnackbar(event.message, it, duration = SnackbarDuration.Indefinite)
+                            val result = scaffoldState.snackbarHostState.showSnackbar(
+                                event.message,
+                                it,
+                                duration = SnackbarDuration.Indefinite
+                            )
                             if (result == SnackbarResult.ActionPerformed) {
                                 viewModel.onEvent(DashboardEvent.OnRetry)
                             }
@@ -77,13 +82,17 @@ fun DashBoardScreen(
                     ) {
                         PrimaryButton(
                             text = "Clock-In",
-                            modifier = Modifier.padding(SpaceSemiSmall)
+                            modifier = Modifier
+                                .padding(SpaceSemiSmall)
+                                .weight(0.5f)
                         ) {
 
                         }
                         PrimaryButton(
                             text = "Clock-Out",
-                            modifier = Modifier.padding(SpaceSemiSmall)
+                            modifier = Modifier
+                                .padding(SpaceSemiSmall)
+                                .weight(0.5f)
                         ) {
 
                         }
@@ -100,10 +109,22 @@ fun DashBoardScreen(
                     EmphasisText(text = "WORKING HOURS")
                     Spacer(modifier = Modifier.height(SpaceSemiSmall))
                     Text(text = "Summary", style = MaterialTheme.typography.h5)
-                    Text(text = "total: ${hoursSummary?.workedHours}", style = MaterialTheme.typography.body1)
-                    Text(text = "average: ${hoursSummary?.avgWorkHours}", style = MaterialTheme.typography.body1)
-                    Text(text = "days per month: ${hoursSummary?.daysPerMonth}", style = MaterialTheme.typography.body1)
-                    Text(text = "present days : ${hoursSummary?.presentDays}", style = MaterialTheme.typography.body1)
+                    Text(
+                        text = "total: ${hoursSummary?.workedHours}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Text(
+                        text = "average: ${hoursSummary?.avgWorkHours}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Text(
+                        text = "days per month: ${hoursSummary?.daysPerMonth}",
+                        style = MaterialTheme.typography.body1
+                    )
+                    Text(
+                        text = "present days : ${hoursSummary?.presentDays}",
+                        style = MaterialTheme.typography.body1
+                    )
                 }
             }
 

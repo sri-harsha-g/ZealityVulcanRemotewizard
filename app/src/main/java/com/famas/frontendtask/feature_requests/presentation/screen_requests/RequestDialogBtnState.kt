@@ -1,4 +1,4 @@
-package com.famas.frontendtask.feature_requests.presentation.screen_request
+package com.famas.frontendtask.feature_requests.presentation.screen_requests
 
 import com.famas.frontendtask.feature_requests.presentation.components.RequestButtonType
 

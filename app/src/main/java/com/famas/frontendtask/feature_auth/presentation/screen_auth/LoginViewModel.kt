@@ -5,10 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.famas.frontendtask.core.navigation.Screen
-import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.data.Response
 import com.famas.frontendtask.core.data.ResponseStatus
+import com.famas.frontendtask.core.navigation.Screen
+import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.feature_auth.domain.use_cases.LoginUseCase
 import com.famas.frontendtask.feature_auth.domain.use_cases.StoreUserDetails
 import com.famas.frontendtask.feature_auth.presentation.util.AuthEvent
@@ -23,7 +23,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val storeUserDetails: StoreUserDetails
-): ViewModel() {
+) : ViewModel() {
 
     private val _loginState = mutableStateOf(LoginState())
     val loginState: State<LoginState> = _loginState
@@ -33,7 +33,7 @@ class LoginViewModel @Inject constructor(
 
     fun onEvent(event: AuthEvent) {
         viewModelScope.launch {
-            when(event) {
+            when (event) {
                 is AuthEvent.OnChangeLoginState -> {
                     _loginState.value = event.loginState
                 }
@@ -41,12 +41,15 @@ class LoginViewModel @Inject constructor(
                 is AuthEvent.OnLoginClick -> {
                     _loginState.value = loginState.value.copy(loading = true)
                     viewModelScope.launch {
-                        when(val result = loginUseCase(emailOrUserName = loginState.value.email, password = loginState.value.password)) {
+                        when (val result = loginUseCase(
+                            emailOrUserName = loginState.value.email,
+                            password = loginState.value.password
+                        )) {
 
                             is Response.Success -> {
                                 _loginState.value = loginState.value.copy(loading = false)
-                                when(result.source?.status) {
-                                    ResponseStatus.Success.id  -> {
+                                when (result.source?.status) {
+                                    ResponseStatus.Success.id -> {
                                         _uiEventFlow.emit(UiEvent.ShowSnackBar("successfully logged in"))
                                         result.source.data.first().let {
                                             storeUserDetails(
@@ -55,21 +58,37 @@ class LoginViewModel @Inject constructor(
                                                 userType = it.userType
                                             )
                                         }
-                                        _uiEventFlow.emit(UiEvent.OnNavigate(Screen.DashBoard.getRoute(result.source.data.first().userId)))
+                                        _uiEventFlow.emit(
+                                            UiEvent.OnNavigate(
+                                                Screen.DashBoard.getRoute(
+                                                    result.source.data.first().userId
+                                                )
+                                            )
+                                        )
                                     }
 
                                     ResponseStatus.Failure.id -> {
                                         _uiEventFlow.emit(UiEvent.ShowSnackBar(result.source.msg))
                                     }
 
-                                    else -> _uiEventFlow.emit(UiEvent.ShowSnackBar(result.source?.msg ?: "An unknown error occurred, please try again"))
+                                    else -> _uiEventFlow.emit(
+                                        UiEvent.ShowSnackBar(
+                                            result.source?.msg
+                                                ?: "An unknown error occurred, please try again"
+                                        )
+                                    )
                                 }
                             }
 
                             is Response.Error -> {
                                 _loginState.value = loginState.value.copy(loading = false)
-                                _uiEventFlow.emit(UiEvent.ShowSnackBar(result.message ?: "An unknown error occurred, please try again"))
-                                Log.d("myTag", "${result.message}", )
+                                _uiEventFlow.emit(
+                                    UiEvent.ShowSnackBar(
+                                        result.message
+                                            ?: "An unknown error occurred, please try again"
+                                    )
+                                )
+                                Log.d("myTag", "${result.message}")
                             }
                         }
                     }

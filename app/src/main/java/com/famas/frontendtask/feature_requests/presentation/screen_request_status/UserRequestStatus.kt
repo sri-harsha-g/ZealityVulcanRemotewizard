@@ -1,19 +1,18 @@
 package com.famas.frontendtask.feature_requests.presentation.screen_request_status
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import com.famas.frontendtask.core.presentation.components.EmphasisText
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.SpaceSmall
 import com.famas.frontendtask.feature_requests.presentation.components.EmployeeCard
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -32,7 +31,7 @@ fun UserRequestsStatusScreen(
     secondLazyListState: LazyListState = rememberLazyListState()
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
-    val tabs = remember { listOf(RequestStatusTab.Pending ,RequestStatusTab.Approved) }
+    val tabs = remember { listOf(RequestStatusTab.Pending, RequestStatusTab.Approved) }
     val coroutine = rememberCoroutineScope()
 
     Column(modifier = modifier) {
@@ -44,7 +43,8 @@ fun UserRequestsStatusScreen(
             tabs.forEachIndexed { index, requestStatusTab ->
                 Tab(selected = pagerState.currentPage == index, onClick = {
                     coroutine.launch {
-                        pagerState.animateScrollToPage(index) }
+                        pagerState.animateScrollToPage(index)
+                    }
                 }
                 ) {
                     Text(text = requestStatusTab.label, modifier = Modifier.padding(SpaceMedium))
@@ -54,7 +54,7 @@ fun UserRequestsStatusScreen(
 
 
         HorizontalPager(count = tabs.size, state = pagerState) { page ->
-            when(page) {
+            when (page) {
                 0 -> {
                     LazyColumn(
                         modifier = Modifier

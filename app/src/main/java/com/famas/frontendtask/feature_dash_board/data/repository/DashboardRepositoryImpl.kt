@@ -15,15 +15,13 @@ class DashboardRepositoryImpl(
         return try {
             val result = dashboardApi.getDashboard(userId)
             Response.Success(result)
-        }
-        catch(e: HttpException) {
+        } catch (e: HttpException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage ?: "An unexpected error occurred")
-        } catch(e: IOException) {
+        } catch (e: IOException) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error("Couldn't reach server. Check your internet connection.")
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.d("myTag", e.localizedMessage, e)
             Response.Error(e.localizedMessage)
         }

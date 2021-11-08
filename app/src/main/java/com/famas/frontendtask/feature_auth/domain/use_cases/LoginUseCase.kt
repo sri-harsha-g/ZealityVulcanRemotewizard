@@ -1,6 +1,5 @@
 package com.famas.frontendtask.feature_auth.domain.use_cases
 
-import android.util.Log
 import com.famas.frontendtask.core.data.Response
 import com.famas.frontendtask.feature_auth.data.remote.request.AuthRequest
 import com.famas.frontendtask.feature_auth.data.remote.responce.AuthResponse

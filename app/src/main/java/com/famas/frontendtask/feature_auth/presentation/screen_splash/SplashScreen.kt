@@ -10,10 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.famas.frontendtask.core.navigation.Screen
-import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.util.Constants
-import com.famas.frontendtask.feature_auth.presentation.screen_auth.LoginViewModel
-import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun SplashScreen(

@@ -4,13 +4,18 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.ExperimentalUnitApi
 import com.famas.frontendtask.core.presentation.components.EmphasisText
-import com.famas.frontendtask.core.ui.theme.*
+import com.famas.frontendtask.core.ui.theme.SpaceMedium
+import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
+import com.famas.frontendtask.core.ui.theme.SpaceSmall
 
 @OptIn(ExperimentalUnitApi::class)
 @ExperimentalAnimationApi

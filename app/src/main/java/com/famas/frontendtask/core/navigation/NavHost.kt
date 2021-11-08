@@ -8,10 +8,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.famas.frontendtask.core.util.Constants.SCREEN_SLIDE_DURATION
 import com.famas.frontendtask.core.navigation.Screen.*
 import com.famas.frontendtask.core.presentation.util.BottomNavItem.*
 import com.famas.frontendtask.core.util.Constants.AUTH_SCREEN
+import com.famas.frontendtask.core.util.Constants.SCREEN_SLIDE_DURATION
 import com.famas.frontendtask.core.util.Constants.SPLASH_SCREEN
 import com.famas.frontendtask.feature_auth.presentation.screen_auth.AuthScreen
 import com.famas.frontendtask.feature_auth.presentation.screen_splash.SplashScreen
@@ -24,8 +24,8 @@ import com.famas.frontendtask.feature_payslips.presentation.PayslipsScreen
 import com.famas.frontendtask.feature_reports.presentation.ReportsScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation.LeaveVacationRequest
 import com.famas.frontendtask.feature_requests.presentation.screen_ot_swipe_late.OTSwipeLateRequestScreen
-import com.famas.frontendtask.feature_requests.presentation.screen_request.RequestScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_request_status.PendingRequests
+import com.famas.frontendtask.feature_requests.presentation.screen_requests.RequestScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -52,8 +52,9 @@ fun MainNavHost(
             SplashScreen(
                 onNavigate = {
                     navController.navigate(it) {
-                        popUpTo(it)
-                        launchSingleTop = true
+                        popUpTo(SPLASH_SCREEN) {
+                            inclusive = true
+                        }
                     }
                 }
             )
@@ -63,8 +64,9 @@ fun MainNavHost(
             AuthScreen(
                 navigate = {
                     navController.navigate(it) {
-                        popUpTo(it)
-                        launchSingleTop = true
+                        popUpTo(AUTH_SCREEN) {
+                            inclusive = true
+                        }
                     }
                 },
                 showSnackBar = {
@@ -88,7 +90,7 @@ fun MainNavHost(
         }
 
         composable(Requests.route) {
-            RequestScreen(navController = navController)
+            RequestScreen(navController = navController, scaffoldState = scaffoldState)
         }
 
         composable(Payslips.route) {

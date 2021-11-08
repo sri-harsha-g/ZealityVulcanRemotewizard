@@ -1,5 +1,6 @@
 package com.famas.frontendtask.core.ui.theme
 
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
@@ -19,7 +20,7 @@ private val LightColorPalette = lightColors(
 )
 */
 
-private val LightColorPalette = lightColors(
+val LightColorPalette = lightColors(
     primary = IndustrialBlue,
     secondary = IndustrialBlueSec,
     background = Color.White,
@@ -32,11 +33,11 @@ private val LightColorPalette = lightColors(
 
 @Composable
 fun FrontendTaskTheme(
-    content: @Composable() () -> Unit
+    colorPalette: Colors = LightColorPalette,
+    content: @Composable () -> Unit
 ) {
-
     MaterialTheme(
-        colors = LightColorPalette,
+        colors = colorPalette,
         typography = Typography,
         shapes = Shapes,
         content = content

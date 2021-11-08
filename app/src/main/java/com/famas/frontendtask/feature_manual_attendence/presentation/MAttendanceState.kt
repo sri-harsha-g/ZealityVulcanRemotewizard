@@ -5,6 +5,18 @@ import com.famas.frontendtask.core.presentation.compose_states.DropDownPickerSta
 data class MAttendanceState(
     val loading: Boolean = false,
     val selectedDateTime: String? = null,
-    val departmentsDropDown: DropDownPickerState<String> = DropDownPickerState(list = listOf("dep1", "dep2", "dep3")),
-    val employeeDropDown: DropDownPickerState<String> = DropDownPickerState(list = listOf("emp1", "emp2", "emp3")),
+    val departmentsDropDown: DropDownPickerState<String> = DropDownPickerState(
+        list = listOf(
+            "dep1",
+            "dep2",
+            "dep3"
+        )
+    ),
+    val employeeDropDown: DropDownPickerState<String> = DropDownPickerState(
+        list = listOf(
+            "emp1",
+            "emp2",
+            "emp3"
+        )
+    ),
 )

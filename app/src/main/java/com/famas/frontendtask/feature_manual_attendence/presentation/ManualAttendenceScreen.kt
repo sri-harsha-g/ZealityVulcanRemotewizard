@@ -6,7 +6,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarResult
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,7 +22,6 @@ import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
-import com.famas.frontendtask.feature_dash_board.presentation.DashboardEvent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -63,7 +64,7 @@ fun ManualAttendanceScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(SpaceSemiLarge),
+            .padding(horizontal = SpaceSemiLarge),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
         state = lazyListState

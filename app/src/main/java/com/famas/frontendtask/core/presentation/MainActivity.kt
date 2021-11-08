@@ -24,11 +24,8 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.famas.frontendtask.core.navigation.MainNavHost
-import com.famas.frontendtask.core.navigation.Screen
 import com.famas.frontendtask.core.navigation.Screen.*
 import com.famas.frontendtask.core.navigation.getScreen
 import com.famas.frontendtask.core.presentation.components.CustomBottomBar
@@ -52,14 +49,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var navController: NavHostController
     private val viewModel: MainViewModel by viewModels()
+    var currentRoute: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            navController = rememberAnimatedNavController()
+            val navController = rememberAnimatedNavController()
             val scaffoldState = rememberScaffoldState()
             val coroutine = rememberCoroutineScope()
             val menuScreens = remember {
@@ -75,7 +72,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            val currentRoute =
+            currentRoute =
                 navController.currentBackStackEntryAsState().value?.destination?.route
             val currentScreen = currentRoute?.getScreen()
             val showGestures =
@@ -84,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
             var showProfileDialog by remember { mutableStateOf(false) }
 
-            FrontendTaskTheme {
+            FrontendTaskTheme(colorPalette = provideColorPalette(viewModel = viewModel)) {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
                     Scaffold(
@@ -197,9 +194,9 @@ class MainActivity : ComponentActivity() {
                                     Toast.LENGTH_LONG
                                 ).show()
                                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }
-                            else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+                            } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
                         }
+
                         it.getOrElse(Manifest.permission.ACCESS_COARSE_LOCATION, { false }) -> {
                             // Only approximate location access granted.
                             Log.d("myTag", "Only approximate location access granted")
@@ -210,9 +207,9 @@ class MainActivity : ComponentActivity() {
                                     Toast.LENGTH_LONG
                                 ).show()
                                 startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-                            }
-                            else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+                            } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
                         }
+
                         else -> {
                             // No location access granted.
                             Log.d("myTag", "No location access granted")
@@ -260,13 +257,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun sendCommandToService(command: String) {
-        Intent(this, TrackingService::class.java).also {
-            it.action = command
-            startService(it)
-        }
-    }
-
-    override fun onBackPressed() {
-        navController.navigateUp()
+        if (currentRoute != null && currentRoute != Constants.SPLASH_SCREEN && currentRoute != Constants.AUTH_SCREEN)
+            Intent(this, TrackingService::class.java).also {
+                it.action = command
+                startService(it)
+            }
     }
 }

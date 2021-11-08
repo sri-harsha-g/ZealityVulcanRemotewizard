@@ -1,6 +1,5 @@
 package com.famas.frontendtask.feature_auth.domain.use_cases
 
-import com.famas.frontendtask.core.data.local.datastore.Datastore
 import com.famas.frontendtask.feature_auth.domain.repository.AuthRepository
 
 class StoreUserDetails(

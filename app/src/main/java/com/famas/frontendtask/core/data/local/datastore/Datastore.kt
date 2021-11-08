@@ -19,6 +19,12 @@ class Datastore(
         }
     }
 
+    suspend fun storeLong(stringPrefKey: Preferences.Key<Long>, value: Long) {
+        context.datastore.edit {
+            it[stringPrefKey] = value
+        }
+    }
+
     suspend fun storeInt(intPrefKey: Preferences.Key<Int>, value: Int) {
         context.datastore.edit {
             it[intPrefKey] = value
@@ -26,6 +32,12 @@ class Datastore(
     }
 
     fun readString(stringPrefKey: Preferences.Key<String>): Flow<String?> {
+        return context.datastore.data.map {
+            it[stringPrefKey]
+        }
+    }
+
+    fun readLong(stringPrefKey: Preferences.Key<Long>): Flow<Long?> {
         return context.datastore.data.map {
             it[stringPrefKey]
         }

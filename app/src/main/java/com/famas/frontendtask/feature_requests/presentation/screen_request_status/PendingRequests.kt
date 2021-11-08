@@ -4,26 +4,41 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.famas.frontendtask.core.presentation.components.EmphasisText
-import com.famas.frontendtask.core.ui.theme.SpaceLarge
+import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.SpaceSmall
 import com.famas.frontendtask.feature_requests.presentation.components.EmployeeCard
+import kotlinx.coroutines.flow.collectLatest
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @Composable
-fun PendingRequests() {
+fun PendingRequests(
+    viewModel: PendingRequestsViewModel = hiltViewModel()
+) {
+    val state = viewModel.pendingRequestsState.value
 
-    var showDialog by remember { mutableStateOf(false) }
-    var reason by remember { mutableStateOf("") }
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel.uiEventFlow.collectLatest {
+            when (it) {
+                is UiEvent.OnNavigate -> {
+
+                }
+
+                is UiEvent.ShowSnackBar -> {
+
+                }
+            }
+        }
+    })
 
     LazyColumn(
         modifier = Modifier
@@ -35,18 +50,20 @@ fun PendingRequests() {
                 modifier = Modifier.padding(vertical = SpaceSmall),
                 showButtons = true,
                 showUserDetails = true,
-                onAccept = {},
+                onAccept = {
+                    viewModel.onEvent(PendingRequestsEvent.OnAccept)
+                },
                 onReject = {
-                    showDialog = true
+                    viewModel.onEvent(PendingRequestsEvent.OnReject)
                 }
             )
         }
     }
 
 
-    if (showDialog) {
-        Dialog(onDismissRequest = { showDialog = false }) {
-            Card {
+    if (state.reasonDialogState.showDialog) {
+        Dialog(onDismissRequest = { }) {
+            Card(modifier = Modifier.padding(SpaceMedium)) {
                 Column(modifier = Modifier.padding(SpaceSemiLarge)) {
                     EmphasisText(
                         text = "Please specify the reason",
@@ -54,8 +71,8 @@ fun PendingRequests() {
                     )
                     Spacer(modifier = Modifier.height(SpaceSemiLarge))
                     OutlinedTextField(
-                        value = reason,
-                        onValueChange = { reason = it },
+                        value = state.reasonDialogState.reason ?: "",
+                        onValueChange = { viewModel.onEvent(PendingRequestsEvent.OnReason(it)) },
                         maxLines = 5,
                         modifier = Modifier
                             .fillMaxWidth()
@@ -67,10 +84,10 @@ fun PendingRequests() {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        TextButton(onClick = { showDialog = false }) {
+                        TextButton(onClick = { viewModel.onEvent(PendingRequestsEvent.OnCancelDialog) }) {
                             Text(text = "Cancel")
                         }
-                        Button(onClick = { showDialog = false }) {
+                        Button(onClick = { viewModel.onEvent(PendingRequestsEvent.OnSubmitDialog) }) {
                             Text(text = "Submit")
                         }
                     }

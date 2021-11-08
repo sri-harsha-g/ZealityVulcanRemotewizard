@@ -1,4 +1,4 @@
-package com.famas.frontendtask.feature_requests.presentation.screen_request
+package com.famas.frontendtask.feature_requests.presentation.screen_requests
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -8,29 +8,54 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.famas.frontendtask.core.navigation.Screen
 import com.famas.frontendtask.core.presentation.components.EmphasisText
-import com.famas.frontendtask.core.ui.theme.*
+import com.famas.frontendtask.core.presentation.util.UiEvent
+import com.famas.frontendtask.core.ui.theme.SpaceMedium
+import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
+import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
 import com.famas.frontendtask.feature_requests.presentation.components.RequestBtnLayout
 import com.famas.frontendtask.feature_requests.presentation.screen_request_status.UserRequestsStatusScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
 fun RequestScreen(
-    isAdmin: Boolean = true,
-    navController: NavController
+    viewModel: RequestsScreenViewModel = viewModel(),
+    navController: NavController,
+    scaffoldState: ScaffoldState
 ) {
-    var requestDialogBtnState by remember { mutableStateOf(RequestDialogBtnState()) }
     val firstLazyListState = rememberLazyListState()
     val secondLazyListState = rememberLazyListState()
+    val state = viewModel.requestsScreenState.value
+    val coroutine = rememberCoroutineScope()
+
+    LaunchedEffect(key1 = true, block = {
+        viewModel.uiEventFlow.collectLatest {
+            when (it) {
+                is UiEvent.OnNavigate -> {
+                    navController.navigate(it.route)
+                }
+
+                is UiEvent.ShowSnackBar -> {
+                    coroutine.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(it.message)
+                    }
+                }
+            }
+        }
+    })
 
     Box(modifier = Modifier.fillMaxSize()) {
         UserRequestsStatusScreen(
@@ -50,16 +75,15 @@ fun RequestScreen(
             RequestBtnLayout(
                 modifier = Modifier.padding(SpaceSemiSmall),
                 onClick = {
-                    if (isAdmin) requestDialogBtnState = RequestDialogBtnState(showDialog = true, dialogFor = it)
-                    else navController.navigate(it.route)
+                    viewModel.onEvent(RequestsScreenEvent.OnRequestBtnLtClick(it))
                 },
-                isAdmin = isAdmin
+                isAdmin = state.isAdmin
             )
         }
     }
 
-    if (requestDialogBtnState.showDialog) {
-        Dialog(onDismissRequest = { requestDialogBtnState = RequestDialogBtnState(showDialog = false) }) {
+    if (state.requestDialogBtnState.showDialog) {
+        Dialog(onDismissRequest = { }) {
             Card {
                 Column(modifier = Modifier.padding(SpaceSemiLarge)) {
                     EmphasisText(
@@ -73,10 +97,7 @@ fun RequestScreen(
                     ) {
                         Button(
                             onClick = {
-                                requestDialogBtnState.dialogFor?.let {
-                                    navController.navigate(it.route)
-                                }
-                                requestDialogBtnState = RequestDialogBtnState(showDialog = false)
+                                viewModel.onEvent(RequestsScreenEvent.OnApply)
                             }
                         ) {
                             Text(text = "APPLY")
@@ -84,8 +105,7 @@ fun RequestScreen(
 
                         Button(
                             onClick = {
-                                requestDialogBtnState = RequestDialogBtnState(showDialog = false)
-                                navController.navigate(Screen.PendingRequests.route)
+                                viewModel.onEvent(RequestsScreenEvent.OnApprove)
                             }
                         ) {
                             Text(text = "APPROVE")

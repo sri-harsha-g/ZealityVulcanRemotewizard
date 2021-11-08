@@ -17,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.viewinterop.AndroidView
 import coil.compose.rememberImagePainter
 import com.famas.frontendtask.R
@@ -44,8 +43,11 @@ fun CameraPreviewScreen(
         onResult = {
             if (it && !startLaunchedEffect) {
                 startLaunchedEffect = true
-            }
-            else Toast.makeText(context, context.getText(R.string.except_cam_perm), Toast.LENGTH_SHORT).show()
+            } else Toast.makeText(
+                context,
+                context.getText(R.string.except_cam_perm),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     )
     var capturedFile by remember {
@@ -116,8 +118,7 @@ fun CameraPreviewScreen(
                                     capturing = false
                                 }
                             )
-                        }
-                        else {
+                        } else {
                             showSnackbar("verifying..")
                         }
                     }

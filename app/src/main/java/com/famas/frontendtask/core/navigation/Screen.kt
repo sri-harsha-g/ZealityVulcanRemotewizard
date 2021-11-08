@@ -2,7 +2,7 @@ package com.famas.frontendtask.core.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.*
+import androidx.compose.material.icons.outlined.CameraAlt
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.famas.frontendtask.core.navigation.Screen.*
 
@@ -59,6 +59,7 @@ sealed class Screen(
 
 
     companion object {
+        const val IS_ADMIN: String = "is_admin"
         const val USER_ID = "user_id"
     }
 }
