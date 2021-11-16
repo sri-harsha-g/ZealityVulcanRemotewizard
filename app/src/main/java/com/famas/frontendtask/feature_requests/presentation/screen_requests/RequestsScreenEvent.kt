@@ -6,4 +6,6 @@ sealed class RequestsScreenEvent {
     data class OnRequestBtnLtClick(val requestButtonType: RequestButtonType) : RequestsScreenEvent()
     object OnApply : RequestsScreenEvent()
     object OnApprove : RequestsScreenEvent()
+    object DismissDialog : RequestsScreenEvent()
+    data class ToggleBottomSheet(val event: BottomSheetEvent) : RequestsScreenEvent()
 }

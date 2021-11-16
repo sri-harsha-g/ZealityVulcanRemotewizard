@@ -19,9 +19,7 @@ import com.famas.frontendtask.core.presentation.components.DateTimePicker
 import com.famas.frontendtask.core.presentation.components.DropDown
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.presentation.util.UiEvent
-import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
-import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
+import com.famas.frontendtask.core.ui.theme.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -64,7 +62,7 @@ fun ManualAttendanceScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SpaceSemiLarge),
+            .defaultScreenPadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
         state = lazyListState
@@ -73,18 +71,19 @@ fun ManualAttendanceScreen(
             DropDown(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = SpaceSemiLarge, horizontal = SpaceMedium),
+                    .padding(vertical = SpaceSemiLarge),
                 heading = stringResource(R.string.select_department),
                 hint = stringResource(R.string.department),
                 list = state.departmentsDropDown.list,
                 selectedIndex = state.departmentsDropDown.selectedIndex,
                 onSelected = { viewModel.onEvent(MAttendanceEvent.OnDepartmentSelected(it)) }
             )
-
+            Spacer(modifier = Modifier.height(SpaceLarge))
+            
             DropDown(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = SpaceSemiLarge, horizontal = SpaceMedium),
+                    .padding(vertical = SpaceSemiLarge),
                 heading = stringResource(R.string.select_employee),
                 hint = stringResource(R.string.employee),
                 list = state.employeeDropDown.list,
@@ -93,6 +92,7 @@ fun ManualAttendanceScreen(
                     viewModel.onEvent(MAttendanceEvent.OnEmployeeSelected(it))
                 }
             )
+            Spacer(modifier = Modifier.height(SpaceLarge))
 
             DateTimePicker(
                 title = stringResource(id = R.string.select_date_time),

@@ -22,3 +22,17 @@ fun UserAuthAnimation(modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
+
+@Composable
+fun UpdateAnimation(modifier: Modifier = Modifier) {
+    val composition by rememberLottieComposition(spec = LottieCompositionSpec.RawRes(R.raw.update_rocket))
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        iterations = Int.MAX_VALUE
+    )
+    LottieAnimation(
+        composition = composition,
+        progress = progress,
+        modifier = modifier
+    )
+}

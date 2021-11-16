@@ -11,8 +11,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import com.famas.frontendtask.core.presentation.components.EmphasisText
+import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
 import com.famas.frontendtask.core.ui.theme.SpaceSmall
@@ -33,9 +35,10 @@ fun EmployeeCard(
     Card(
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.small,
-        onClick = { expand = !expand }
+        onClick = { expand = !expand },
+        elevation = SpaceSemiSmall
     ) {
-        Column(modifier = Modifier.padding(SpaceMedium)) {
+        Column(modifier = Modifier.padding(horizontal = SpaceMedium, vertical = SpaceLarge)) {
             HorizontalCardDetailItem(head = "Request type: ", text = "Request type")
             if (showUserDetails)
                 HorizontalCardDetailItem(head = "Employee number: ", text = "1245313")
@@ -90,7 +93,8 @@ fun HorizontalCardDetailItem(
             style = MaterialTheme.typography.subtitle1,
             modifier = Modifier
                 .padding(end = SpaceSmall)
-                .alignByBaseline()
+                .alignByBaseline(),
+            color = Color.DarkGray
         )
         EmphasisText(
             text = text,

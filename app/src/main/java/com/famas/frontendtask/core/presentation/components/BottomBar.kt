@@ -10,8 +10,8 @@ import com.famas.frontendtask.core.ui.theme.SpaceMedium
 @Composable
 fun CustomBottomBar(currentScreen: String, onItemClick: (BottomNavItem) -> Unit) {
 
-    val bottomNavItems = remember { listOf(Search, Notifications, Logout) }
-    var selectedItem by remember { mutableStateOf<BottomNavItem>(Logout) }
+    val bottomNavItems = remember { listOf(Search, Notifications, Profile) }
+    var selectedItem by remember { mutableStateOf<BottomNavItem>(Profile) }
 
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.surface,

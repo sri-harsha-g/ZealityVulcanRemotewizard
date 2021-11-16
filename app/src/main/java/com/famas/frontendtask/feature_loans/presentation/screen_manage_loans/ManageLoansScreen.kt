@@ -1,37 +1,36 @@
-package com.famas.frontendtask.feature_requests.presentation.screen_request_status
+package com.famas.frontendtask.feature_loans.presentation.screen_manage_loans
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSmall
-import com.famas.frontendtask.feature_requests.presentation.components.EmployeeCard
+import com.famas.frontendtask.core.ui.theme.SpaceSemiSmall
+import com.famas.frontendtask.feature_loans.presentation.components.LoanCard
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
+@ExperimentalMaterialApi
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
-@ExperimentalMaterialApi
 @Composable
-fun UserRequestsStatusScreen(
+fun ManageLoansScreen(
     modifier: Modifier = Modifier,
-    firstLazyListState: LazyListState = rememberLazyListState(),
-    secondLazyListState: LazyListState = rememberLazyListState()
+    viewModel: ManageLoansViewModel = hiltViewModel()
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
-    val tabs = remember { listOf(RequestStatusTab.Pending, RequestStatusTab.Approved) }
+    val tabs = remember { ManageLoanTabs.values() }
     val coroutine = rememberCoroutineScope()
 
     Column(modifier = modifier) {
@@ -40,14 +39,14 @@ fun UserRequestsStatusScreen(
                 modifier = Modifier.pagerTabIndicatorOffset(pagerState, it)
             )
         }) {
-            tabs.forEachIndexed { index, requestStatusTab ->
+            tabs.forEachIndexed { index, manageLoanTab ->
                 Tab(selected = pagerState.currentPage == index, onClick = {
                     coroutine.launch {
                         pagerState.animateScrollToPage(index)
                     }
                 }
                 ) {
-                    Text(text = requestStatusTab.label, modifier = Modifier.padding(SpaceMedium))
+                    Text(text = manageLoanTab.label, modifier = Modifier.padding(SpaceMedium))
                 }
             }
         }
@@ -55,33 +54,35 @@ fun UserRequestsStatusScreen(
 
         HorizontalPager(count = tabs.size, state = pagerState) { page ->
             when (page) {
-                0 -> {
+                ManageLoanTabs.PENDING.ordinal -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = SpaceMedium),
-                        state = firstLazyListState
+                        state = rememberLazyListState()
                     ) {
                         items(15) {
-                            EmployeeCard(
-                                showUserDetails = false,
-                                modifier = Modifier.padding(vertical = SpaceSmall)
+                            LoanCard(
+                                showReviewButtons = true,
+                                onReject = {},
+                                onAccept = {},
+                                modifier = Modifier.padding(SpaceSemiSmall)
                             )
                         }
                     }
                 }
 
-                1 -> {
+                ManageLoanTabs.REVIEWED.ordinal -> {
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(horizontal = SpaceMedium),
-                        state = secondLazyListState
+                        state = rememberLazyListState()
                     ) {
                         items(15) {
-                            EmployeeCard(
-                                showUserDetails = false,
-                                modifier = Modifier.padding(vertical = SpaceSmall)
+                            LoanCard(
+                                showReviewButtons = false,
+                                modifier = Modifier.padding(SpaceSemiSmall)
                             )
                         }
                     }
@@ -91,6 +92,6 @@ fun UserRequestsStatusScreen(
     }
 }
 
-enum class RequestStatusTab(val label: String) {
-    Pending("Pending"), Approved("Approved")
+enum class ManageLoanTabs(val label: String) {
+    PENDING("Pending"), REVIEWED("Reviewed")
 }

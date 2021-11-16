@@ -1,11 +1,11 @@
 package com.famas.frontendtask.core.presentation.util
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Logout
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -26,9 +26,9 @@ sealed class BottomNavItem(
         label = "Notifications"
     )
 
-    object Logout : BottomNavItem(
-        route = "Logout",
-        icon = { if (it) Icons.Filled.Logout else Icons.Outlined.Logout },
-        label = "Logout"
+    object Profile : BottomNavItem(
+        route = "Profile",
+        icon = { if (it) Icons.Filled.Person else Icons.Outlined.Person },
+        label = "Profile"
     )
 }

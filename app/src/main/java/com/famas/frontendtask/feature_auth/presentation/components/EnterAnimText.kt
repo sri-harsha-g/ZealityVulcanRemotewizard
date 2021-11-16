@@ -32,7 +32,7 @@ fun AnimEnterText(visible: Boolean) {
         Text(
             text = "Hello, there!",
             style = MaterialTheme.typography.h1,
-            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth()
         )
     }

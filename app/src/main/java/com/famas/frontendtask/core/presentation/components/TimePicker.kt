@@ -14,7 +14,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.famas.frontendtask.core.ui.theme.QuarterCornerShape
+import com.famas.frontendtask.core.ui.theme.DefaultShape
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import java.util.*
@@ -45,7 +45,7 @@ fun TimePicker(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(SpaceMedium),
-            shape = QuarterCornerShape,
+            shape = DefaultShape,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             TimePickerDialog(

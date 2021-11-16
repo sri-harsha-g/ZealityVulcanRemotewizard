@@ -34,9 +34,6 @@ class LoginViewModel @Inject constructor(
     fun onEvent(event: AuthEvent) {
         viewModelScope.launch {
             when (event) {
-                is AuthEvent.OnChangeLoginState -> {
-                    _loginState.value = event.loginState
-                }
 
                 is AuthEvent.OnLoginClick -> {
                     _loginState.value = loginState.value.copy(loading = true)
@@ -92,6 +89,21 @@ class LoginViewModel @Inject constructor(
                             }
                         }
                     }
+                }
+                is AuthEvent.OnEmail -> {
+                    _loginState.value = loginState.value.copy(
+                        email = event.email
+                    )
+                }
+                is AuthEvent.OnPassword -> {
+                    _loginState.value = loginState.value.copy(
+                        password = event.password
+                    )
+                }
+                AuthEvent.TogglePassword -> {
+                    _loginState.value = loginState.value.copy(
+                        isPasswordVisible = !loginState.value.isPasswordVisible
+                    )
                 }
             }
         }

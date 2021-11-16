@@ -13,18 +13,23 @@ import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import com.famas.frontendtask.core.ui.theme.QuarterCornerShape
+import androidx.compose.ui.text.font.FontWeight
+import com.famas.frontendtask.core.ui.theme.DefaultShape
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
+import com.famas.frontendtask.core.util.Size
+import com.famas.frontendtask.core.util.extensions.boldTextStyle
+import com.famas.frontendtask.core.util.extensions.height
+import com.famas.frontendtask.core.util.extensions.primaryTextStyle
+import com.famas.frontendtask.core.util.extensions.secondaryTextStyle
 import java.util.*
 
 @Composable
 fun DateTimePicker(
     modifier: Modifier = Modifier,
     title: String? = null,
-    btnTxt: String = "Pick date & time",
+    btnTxt: String = "  Pick date & time",
     selectedDate: String?,
     setDate: (String) -> Unit
 ) {
@@ -35,19 +40,27 @@ fun DateTimePicker(
 
     Column(modifier = modifier) {
         title?.let {
-            Text(text = it, style = MaterialTheme.typography.subtitle1)
+            Text(text = it, style = primaryTextStyle())
         }
-        EmphasisText(text = "format:YYYY-MM-dd HH:MM", style = MaterialTheme.typography.caption)
+        Text(
+            text = "format:YYYY-MM-dd HH:MM",
+            style = secondaryTextStyle(fontSize = Size.textCaption, alpha = 0.4f)
+        )
 
         PrimaryButton(
             text = btnTxt,
             icon = Icons.Default.CalendarToday,
-            color = MaterialTheme.colors.primary.copy(alpha = 0.2f),
-            textColor = Color.Black,
+            color = MaterialTheme.colors.surface,
+            textColor = MaterialTheme.colors.onSurface.copy(0.6f),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(SpaceMedium),
-            shape = QuarterCornerShape,
+                .padding(vertical = SpaceMedium),
+            shape = DefaultShape,
+            textStyle = primaryTextStyle(
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colors.onSurface,
+                alpha = 0.6f
+            ),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             DatePickerDialog(
@@ -68,11 +81,19 @@ fun DateTimePicker(
                 calendar[Calendar.DATE]
             ).show()
         }
-        EmphasisText(
-            text = "Select date and time: ${selectedDate ?: ""}",
-            modifier = Modifier.padding(start = SpaceSemiLarge),
-            style = MaterialTheme.typography.h5
-        )
+        Column {
+            Text(
+                text = "Selected date and time:",
+                modifier = Modifier.padding(start = SpaceSemiLarge),
+                style = boldTextStyle(fontSize = Size.textExtraSize, alpha = 0.6f)
+            )
+            4.height()
+            Text(
+                text = selectedDate ?: "",
+                modifier = Modifier.padding(start = SpaceSemiLarge),
+                style = boldTextStyle(fontSize = Size.textExtraSize, alpha = 0.6f)
+            )
+        }
     }
 
 }

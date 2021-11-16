@@ -18,6 +18,8 @@ import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
+import com.famas.frontendtask.core.ui.theme.defaultScreenPadding
+import com.famas.frontendtask.core.util.extensions.primaryTextStyle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -61,7 +63,7 @@ fun LeaveVacationRequest(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SpaceSemiLarge),
+            .defaultScreenPadding(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState
@@ -72,19 +74,19 @@ fun LeaveVacationRequest(
                 hint = "permission type",
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(SpaceMedium),
+                    .padding(vertical = SpaceMedium),
                 list = state.permissionDDState.list.map { it.name },
                 selectedIndex = state.permissionDDState.selectedIndex,
                 onSelected = { viewModel.onEvent(LeaveVacationEvent.OnSelectPermType(it)) }
             )
 
-            Spacer(modifier = Modifier.height(SpaceMedium))
+            Spacer(modifier = Modifier.height(SpaceSemiLarge))
             DateTimePicker(
                 title = "Select from date and time",
                 selectedDate = state.fromDate,
                 setDate = { viewModel.onEvent(LeaveVacationEvent.OnSelectFromDate(it)) })
 
-            Spacer(modifier = Modifier.height(SpaceMedium))
+            Spacer(modifier = Modifier.height(SpaceSemiLarge))
             DateTimePicker(
                 title = "Select to date and time",
                 selectedDate = state.toDate,
@@ -105,7 +107,8 @@ fun LeaveVacationRequest(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
-                label = { Text(text = "Reason") }
+                label = { Text(text = "Reason", style = primaryTextStyle(MaterialTheme.colors.primary)) },
+                textStyle = primaryTextStyle()
             )
         }
 

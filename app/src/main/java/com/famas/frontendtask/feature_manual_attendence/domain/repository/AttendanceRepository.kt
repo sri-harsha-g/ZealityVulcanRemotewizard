@@ -16,4 +16,6 @@ interface AttendanceRepository {
     suspend fun getLocations(userId: String, networkLostTime: Long) : Array<LocationEntity>
 
     suspend fun getAllLocations() : Array<LocationEntity>
+
+    suspend fun deleteLocations(vararg locationEntity: LocationEntity)
 }

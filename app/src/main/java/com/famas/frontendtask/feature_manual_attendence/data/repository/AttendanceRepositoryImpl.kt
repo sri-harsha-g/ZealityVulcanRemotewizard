@@ -61,4 +61,8 @@ class AttendanceRepositoryImpl(
         delay(3000L)
         return locationDao.getAllLocations()
     }
+
+    override suspend fun deleteLocations(vararg locationEntity: LocationEntity) {
+        locationDao.deleteLocations(locationEntity = locationEntity)
+    }
 }

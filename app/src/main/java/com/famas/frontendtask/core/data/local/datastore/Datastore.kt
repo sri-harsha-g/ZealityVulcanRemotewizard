@@ -19,6 +19,12 @@ class Datastore(
         }
     }
 
+    suspend fun storeBoolean(stringPrefKey: Preferences.Key<Boolean>, value: Boolean) {
+        context.datastore.edit {
+            it[stringPrefKey] = value
+        }
+    }
+
     suspend fun storeLong(stringPrefKey: Preferences.Key<Long>, value: Long) {
         context.datastore.edit {
             it[stringPrefKey] = value
@@ -32,6 +38,12 @@ class Datastore(
     }
 
     fun readString(stringPrefKey: Preferences.Key<String>): Flow<String?> {
+        return context.datastore.data.map {
+            it[stringPrefKey]
+        }
+    }
+
+    fun readBoolean(stringPrefKey: Preferences.Key<Boolean>): Flow<Boolean?> {
         return context.datastore.data.map {
             it[stringPrefKey]
         }

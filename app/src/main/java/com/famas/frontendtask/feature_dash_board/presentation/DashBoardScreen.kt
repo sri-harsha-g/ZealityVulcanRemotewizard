@@ -61,11 +61,10 @@ fun DashBoardScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SpaceSemiLarge)
+            .defaultScreenPadding()
     ) {
         item {
-            Spacer(modifier = Modifier.height(SpaceLarge))
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), elevation = SpaceSemiSmall) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -102,35 +101,62 @@ fun DashBoardScreen(
 
             Spacer(modifier = Modifier.height(SpaceSemiLarge))
 
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), elevation = SpaceSemiSmall) {
                 Column(
                     modifier = Modifier.padding(SpaceSemiLarge)
                 ) {
                     EmphasisText(text = "WORKING HOURS")
                     Spacer(modifier = Modifier.height(SpaceSemiSmall))
                     Text(text = "Summary", style = MaterialTheme.typography.h5)
-                    Text(
-                        text = "total: ${hoursSummary?.workedHours}",
-                        style = MaterialTheme.typography.body1
-                    )
-                    Text(
-                        text = "average: ${hoursSummary?.avgWorkHours}",
-                        style = MaterialTheme.typography.body1
-                    )
-                    Text(
-                        text = "days per month: ${hoursSummary?.daysPerMonth}",
-                        style = MaterialTheme.typography.body1
-                    )
-                    Text(
-                        text = "present days : ${hoursSummary?.presentDays}",
-                        style = MaterialTheme.typography.body1
-                    )
+                    Row {
+                        Column {
+                            Text(
+                                text = "Total ",
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Average ",
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Days per month ",
+                                style = MaterialTheme.typography.body1
+                            )
+                            Text(
+                                text = "Present days ",
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+                        Column(modifier = Modifier.padding(horizontal = SpaceSmall)) {
+                            repeat(4) {
+                                Text(text = ":")
+                            }
+                        }
+                        Column {
+                            EmphasisText(
+                                text = " ${hoursSummary?.workedHours}",
+                                style = MaterialTheme.typography.body1
+                            )
+                            EmphasisText(
+                                text = " ${hoursSummary?.avgWorkHours}",
+                                style = MaterialTheme.typography.body1
+                            )
+                            EmphasisText(
+                                text = " ${hoursSummary?.daysPerMonth}",
+                                style = MaterialTheme.typography.body1
+                            )
+                            EmphasisText(
+                                text = " ${hoursSummary?.presentDays}",
+                                style = MaterialTheme.typography.body1
+                            )
+                        }
+                    }
                 }
             }
 
             Spacer(modifier = Modifier.height(SpaceSemiLarge))
 
-            Card(modifier = Modifier.fillMaxWidth()) {
+            Card(modifier = Modifier.fillMaxWidth(), elevation = SpaceSemiSmall) {
                 Column(
                     modifier = Modifier
                         .height(150.dp)

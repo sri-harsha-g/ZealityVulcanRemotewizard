@@ -4,3 +4,7 @@ data class RequestsScreenState(
     val requestDialogBtnState: RequestDialogBtnState = RequestDialogBtnState(),
     val isAdmin: Boolean = false
 )
+
+enum class BottomSheetEvent {
+    Expand, Collapse
+}

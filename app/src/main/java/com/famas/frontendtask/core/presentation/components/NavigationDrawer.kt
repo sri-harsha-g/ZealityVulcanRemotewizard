@@ -14,8 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.famas.frontendtask.core.navigation.Screen
 import com.famas.frontendtask.core.ui.theme.*
 
@@ -27,17 +25,20 @@ fun NavigationDrawer(
 ) {
     LazyColumn {
         item {
-            Spacer(modifier = Modifier.height(150.dp))
+            Spacer(modifier = Modifier.height(SpaceMedium))
             Text(
-                text = "My Profile",
+                text = "Venkatesh Paithireddy",
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(start = SpaceSemiLarge)
             )
-            EmphasisText(
-                text = "Employee id",
-                modifier = Modifier.padding(start = SpaceSemiLarge)
+            Text(
+                text = "1234567890",
+                modifier = Modifier.padding(start = SpaceSemiLarge),
+                style = MaterialTheme.typography.caption,
             )
+            Spacer(modifier = Modifier.height(SpaceMedium))
             Divider(Modifier.padding(vertical = SpaceSemiSmall))
+            Spacer(modifier = Modifier.height(SpaceMedium))
         }
 
         items(screens) {
@@ -45,22 +46,26 @@ fun NavigationDrawer(
                 onItemClick(it)
             }
         }
+
+        item {
+            Spacer(modifier = Modifier.height(SpaceMedium))
+        }
     }
 }
 
 @Composable
 fun DrawerItem(screen: Screen, isSelected: Boolean, onItemClick: () -> Unit) {
     val animatedColor =
-        animateColorAsState(targetValue = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.2f) else Color.White)
+        animateColorAsState(targetValue = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.2f) else MaterialTheme.colors.surface)
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = SpaceSemiLarge, vertical = SpaceSmall)
             .background(
                 color = animatedColor.value.copy(alpha = 0.2f),
-                shape = QuarterCornerShape
+                shape = DefaultShape
             )
-            .clip(QuarterCornerShape)
+            .clip(DefaultShape)
             .clickable { onItemClick() }
             .padding(SpaceMedium),
         verticalAlignment = Alignment.CenterVertically

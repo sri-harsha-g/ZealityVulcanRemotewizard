@@ -1,5 +1,6 @@
 package com.famas.frontendtask.core.data.local.datastore
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
@@ -10,4 +11,5 @@ object DatastoreKeys {
     val userTypeKey = stringPreferencesKey("_user_type_key")
     val primaryColorKey = longPreferencesKey("_primary_color")
     val secondaryColorKey = longPreferencesKey("_secondary_color")
+    val isInDarkThemeKey = booleanPreferencesKey("is_in_dark_theme")
 }

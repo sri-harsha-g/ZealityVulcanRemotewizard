@@ -24,6 +24,8 @@ import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
+import com.famas.frontendtask.core.ui.theme.defaultScreenPadding
+import com.famas.frontendtask.core.util.extensions.primaryTextStyle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -53,7 +55,7 @@ fun OTSwipeLateRequestScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = SpaceSemiLarge),
+            .defaultScreenPadding(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState
@@ -62,7 +64,7 @@ fun OTSwipeLateRequestScreen(
             DropDown(
                 heading = stringResource(R.string.select_perm_type),
                 hint = stringResource(R.string.perm_type),
-                modifier = Modifier.padding(SpaceMedium),
+                modifier = Modifier.padding(vertical = SpaceMedium),
                 list = state.permissionDDState.list.map { it.toString() },
                 selectedIndex = state.permissionDDState.selectedIndex,
                 onSelected = { viewModel.onEvent(OTSwipeEvent.OnSelectPerType(it)) }
@@ -76,48 +78,20 @@ fun OTSwipeLateRequestScreen(
             )
 
             Spacer(modifier = Modifier.height(SpaceSemiLarge))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = SpaceMedium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.pick_hours),
-                    style = MaterialTheme.typography.subtitle1
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    NumberPicker(
-                        list = state.hoursPicker.list,
-                        currentIndex = state.hoursPicker.selectedIndex,
-                        setIndex = { viewModel.onEvent(OTSwipeEvent.SetHour(it)) }
-                    )
-                    Text(text = " h", style = MaterialTheme.typography.subtitle1)
-                }
-            }
+            NumberPicker(
+                list = state.hoursPicker.list,
+                currentIndex = state.hoursPicker.selectedIndex,
+                setIndex = { viewModel.onEvent(OTSwipeEvent.SetHour(it)) },
+                title = "Pick the required hours"
+            )
 
             Spacer(modifier = Modifier.height(SpaceLarge))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(end = SpaceMedium),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.pick_minutes),
-                    style = MaterialTheme.typography.subtitle1
-                )
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    NumberPicker(
-                        list = state.minutesPicker.list,
-                        currentIndex = state.minutesPicker.selectedIndex,
-                        setIndex = { viewModel.onEvent(OTSwipeEvent.SetMinute(it)) }
-                    )
-                    Text(text = " m", style = MaterialTheme.typography.subtitle1)
-                }
-            }
+            NumberPicker(
+                list = state.minutesPicker.list,
+                currentIndex = state.minutesPicker.selectedIndex,
+                setIndex = { viewModel.onEvent(OTSwipeEvent.SetMinute(it)) },
+                title = "Pick the required minutes"
+            )
 
             Spacer(modifier = Modifier.height(SpaceLarge))
             OutlinedTextField(
@@ -134,7 +108,8 @@ fun OTSwipeLateRequestScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
-                label = { Text(text = stringResource(R.string.reson)) }
+                label = { Text(text = stringResource(R.string.reson), style = primaryTextStyle(MaterialTheme.colors.primary)) },
+                textStyle = primaryTextStyle()
             )
         }
 

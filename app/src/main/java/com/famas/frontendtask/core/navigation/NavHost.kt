@@ -19,8 +19,11 @@ import com.famas.frontendtask.feature_dash_board.presentation.DashBoardScreen
 import com.famas.frontendtask.feature_face_auth.presentation.CameraPreviewScreen
 import com.famas.frontendtask.feature_hrms.presentation.HRMS
 import com.famas.frontendtask.feature_id_card.presentation.IDCardScreen
+import com.famas.frontendtask.feature_loans.presentation.screen_apply_loan.ApplyLoanScreen
+import com.famas.frontendtask.feature_loans.presentation.screen_manage_loans.ManageLoansScreen
 import com.famas.frontendtask.feature_manual_attendence.presentation.ManualAttendanceScreen
 import com.famas.frontendtask.feature_payslips.presentation.PayslipsScreen
+import com.famas.frontendtask.feature_profile.presentation.screen_profile.ScreenProfile
 import com.famas.frontendtask.feature_reports.presentation.ReportsScreen
 import com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation.LeaveVacationRequest
 import com.famas.frontendtask.feature_requests.presentation.screen_ot_swipe_late.OTSwipeLateRequestScreen
@@ -163,7 +166,8 @@ fun MainNavHost(
             },
             exitTransition = { _, _ ->
                 slideOutVertically(targetOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
-            }) {
+            }
+        ) {
 
         }
 
@@ -180,7 +184,7 @@ fun MainNavHost(
         }
 
         composable(
-            Logout.route,
+            Profile.route,
             enterTransition = { _, _ ->
                 slideInVertically(initialOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
             },
@@ -188,7 +192,16 @@ fun MainNavHost(
                 slideOutVertically(targetOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
             }
         ) {
+            ScreenProfile()
+        }
 
+
+        composable(ApplyLoan.route) {
+            ApplyLoanScreen()
+        }
+
+        composable(ManageLoans.route) {
+            ManageLoansScreen()
         }
     }
 }

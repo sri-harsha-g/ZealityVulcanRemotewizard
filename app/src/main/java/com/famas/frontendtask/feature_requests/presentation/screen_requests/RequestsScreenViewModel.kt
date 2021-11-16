@@ -21,6 +21,9 @@ class RequestsScreenViewModel @Inject constructor(
     private val _uiEventFlow = MutableSharedFlow<UiEvent>()
     val uiEventFlow = _uiEventFlow.asSharedFlow()
 
+    private val _bottomSheetFlow = MutableSharedFlow<BottomSheetEvent>()
+    val bottomSheetEventFlow = _bottomSheetFlow.asSharedFlow()
+
     private val _requestsScreenState = mutableStateOf(RequestsScreenState())
     val requestsScreenState: State<RequestsScreenState> = _requestsScreenState
 
@@ -52,6 +55,16 @@ class RequestsScreenViewModel @Inject constructor(
                         requestDialogBtnState = RequestDialogBtnState(showDialog = false)
                     )
                     _uiEventFlow.emit(UiEvent.OnNavigate(Screen.PendingRequests.route))
+                }
+
+                RequestsScreenEvent.DismissDialog -> {
+                    _requestsScreenState.value = requestsScreenState.value.copy(
+                        requestDialogBtnState = RequestDialogBtnState(showDialog = false)
+                    )
+                }
+
+                is RequestsScreenEvent.ToggleBottomSheet -> {
+                    _bottomSheetFlow.emit(event.event)
                 }
             }
         }

@@ -2,6 +2,8 @@ package com.famas.frontendtask.core.util
 
 object Constants {
 
+    const val IS_IN_DARK: String = "is_in_dark"
+    const val REQUEST_CODE_CHECK_SETTINGS: Int = 999
     const val LOCATION_DATABASE_NAME: String = "_loc_database"
     const val DATASTORE_NAME: String = "_datastore_preferences"
     const val ALPHA_FOR_PRIMARY = 0.2f
