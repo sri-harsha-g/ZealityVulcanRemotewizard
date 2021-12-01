@@ -19,8 +19,8 @@ import com.famas.frontendtask.core.ui.theme.DefaultShape
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.util.Size
+import com.famas.frontendtask.core.util.extensions.Height
 import com.famas.frontendtask.core.util.extensions.boldTextStyle
-import com.famas.frontendtask.core.util.extensions.height
 import com.famas.frontendtask.core.util.extensions.primaryTextStyle
 import com.famas.frontendtask.core.util.extensions.secondaryTextStyle
 import java.util.*
@@ -87,7 +87,7 @@ fun DateTimePicker(
                 modifier = Modifier.padding(start = SpaceSemiLarge),
                 style = boldTextStyle(fontSize = Size.textExtraSize, alpha = 0.6f)
             )
-            4.height()
+            4.Height()
             Text(
                 text = selectedDate ?: "",
                 modifier = Modifier.padding(start = SpaceSemiLarge),

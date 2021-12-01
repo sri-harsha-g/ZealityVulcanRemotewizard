@@ -29,35 +29,6 @@ import com.famas.frontendtask.core.ui.theme.shadowColor
 import com.google.accompanist.pager.ExperimentalPagerApi
 import okio.IOException
 
-fun Context.assetsToBitmap(fileName: String): Bitmap? {
-    return try {
-        with(assets.open(fileName)) {
-            BitmapFactory.decodeStream(this)
-        }
-    } catch (e: IOException) {
-        null
-    }
-}
-
-@Composable
-fun LoadNetworkImage(
-    image: String,
-    modifier: Modifier,
-    contentScale: ContentScale = ContentScale.FillBounds,
-    alignment: Alignment = Alignment.TopStart,
-) {
-    Image(
-        painter = rememberImagePainter(data = image) {
-            crossfade(true)
-            this.placeholder(R.drawable.ic_app_placeholder)
-        },
-        contentScale = contentScale,
-        alignment = alignment,
-        modifier = modifier,
-        contentDescription = ""
-    )
-}
-
 @SuppressLint("ModifierFactoryUnreferencedReceiver")
 fun Modifier.appShadow(
     color: Color? = null,

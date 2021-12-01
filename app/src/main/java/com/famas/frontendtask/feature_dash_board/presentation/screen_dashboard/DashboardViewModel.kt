@@ -1,4 +1,4 @@
-package com.famas.frontendtask.feature_dash_board.presentation
+package com.famas.frontendtask.feature_dash_board.presentation.screen_dashboard
 
 import android.app.Application
 import android.util.Log

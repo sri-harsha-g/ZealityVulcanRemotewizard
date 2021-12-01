@@ -3,11 +3,12 @@ package com.famas.frontendtask.core.presentation.activity_main
 import android.Manifest
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -31,7 +32,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.famas.frontendtask.core.navigation.MainNavHost
 import com.famas.frontendtask.core.navigation.Screen.*
 import com.famas.frontendtask.core.navigation.getScreen
-import com.famas.frontendtask.core.presentation.activity_main.Util.menuScreens
+import com.famas.frontendtask.core.presentation.activity_main.util.Util.menuScreens
+import com.famas.frontendtask.core.presentation.activity_main.components.LocationPermissionsRationale
 import com.famas.frontendtask.core.presentation.components.CustomBottomBar
 import com.famas.frontendtask.core.presentation.components.NavigationDrawer
 import com.famas.frontendtask.core.presentation.components.StandardToolbar
@@ -53,6 +55,7 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.LocationSettingsRequest
 import com.google.android.gms.location.LocationSettingsResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -62,10 +65,11 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @AndroidEntryPoint
+@ExperimentalCoroutinesApi
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
-    var currentRoute: String? = null
+    private var currentRoute: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +105,6 @@ class MainActivity : ComponentActivity() {
                                             text = currentScreen?.title
                                                 ?: currentRoute?.substringBefore("/")
                                                 ?: "" //Formatting route for clean view
-
                                         )
                                     },
                                     showBackArrow = currentScreen != DashBoard,
@@ -109,7 +112,12 @@ class MainActivity : ComponentActivity() {
                                         if (currentRoute == DashBoard.route) {
                                             IconButton(
                                                 onClick = {
-                                                    viewModel.onEvent(MainActivityEvent.OpenBottomBar(BottomNavItem.Search, currentRoute))
+                                                    viewModel.onEvent(
+                                                        MainActivityEvent.OpenBottomBar(
+                                                            BottomNavItem.Search,
+                                                            currentRoute
+                                                        )
+                                                    )
                                                 }
                                             ) {
                                                 Icon(
@@ -124,7 +132,12 @@ class MainActivity : ComponentActivity() {
                                             }
                                             IconButton(
                                                 onClick = {
-                                                    viewModel.onEvent(MainActivityEvent.OpenBottomBar(BottomNavItem.Notifications, currentRoute))
+                                                    viewModel.onEvent(
+                                                        MainActivityEvent.OpenBottomBar(
+                                                            BottomNavItem.Notifications,
+                                                            currentRoute
+                                                        )
+                                                    )
                                                 }
                                             ) {
                                                 Icon(
@@ -139,7 +152,12 @@ class MainActivity : ComponentActivity() {
                                             }
                                             IconButton(
                                                 onClick = {
-                                                    viewModel.onEvent(MainActivityEvent.OpenBottomBar(BottomNavItem.Profile, currentRoute))
+                                                    viewModel.onEvent(
+                                                        MainActivityEvent.OpenBottomBar(
+                                                            BottomNavItem.Profile,
+                                                            currentRoute
+                                                        )
+                                                    )
                                                 }
                                             ) {
                                                 Icon(
@@ -197,11 +215,16 @@ class MainActivity : ComponentActivity() {
                         drawerGesturesEnabled = true,
                         bottomBar = {
                             if (showGestures) {
-                                CustomBottomBar(
-                                    currentScreen = currentRoute ?: ""
-                                ) {
-                                    if (currentRoute != it.route) {
-                                        viewModel.onEvent(MainActivityEvent.OpenBottomBar(it, currentRoute))
+                                if (currentScreen != DashBoard) {
+                                    CustomBottomBar(
+                                        currentScreen = currentRoute ?: ""
+                                    ) {
+                                        viewModel.onEvent(
+                                            MainActivityEvent.OpenBottomBar(
+                                                it,
+                                                currentRoute
+                                            )
+                                        )
                                     }
                                 }
                             }
@@ -215,57 +238,43 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 }
+
+                //dialog for permission rationale
+                if (state.locationDialogState.showLocationDialog) {
+                    val showOpenSettingText = state.locationDialogState.showOpenSettingsText
+                    LocationPermissionsRationale(
+                        shouldShowRationale = state.locationDialogState.isPermissionsDeniedPermanently,
+                        showOpenSettingsText = showOpenSettingText,
+                        setShowOpenSettings = {
+                            if (it) viewModel.onEvent(MainActivityEvent.ShowOpenSettingsText)
+                            else viewModel.onEvent(MainActivityEvent.HideOpenSettingsText)
+                        },
+                        onClickContinue = {
+                            if (!hasLocationPermissions(this)) {
+                                launcher.launch(LOCATION_PERMISSIONS)
+                            } else {
+                                viewModel.onEvent(MainActivityEvent.CloseLocPermissionsDialog)
+                            }
+                        },
+                        openSettings = {
+                            startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                                data = Uri.parse("package:${packageName}")
+                            })
+                        },
+                        onClickOk = {
+                            launcher.launch(LOCATION_PERMISSIONS)
+                        }
+                    )
+                }
             }
 
 
             val isTracking by viewModel.isTracking.observeAsState(initial = false)
 
-            val launcher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.RequestMultiplePermissions(),
-                onResult = {
-                    when {
-                        it.getOrElse(Manifest.permission.ACCESS_FINE_LOCATION, { false }) -> {
-                            // Precise location access granted.
-                            Log.d("myTag", "Precise location access granted")
-                            if (!isGpsEnabled(this@MainActivity)) {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "Please turn on location",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                enableLocationSettings()
-                            } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
-                        }
-
-                        it.getOrElse(Manifest.permission.ACCESS_COARSE_LOCATION, { false }) -> {
-                            // Only approximate location access granted.
-                            Log.d("myTag", "Only approximate location access granted")
-                            if (!isGpsEnabled(this@MainActivity)) {
-                                Toast.makeText(
-                                    this@MainActivity,
-                                    "Please turn on location",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                                enableLocationSettings()
-                            } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
-                        }
-
-                        else -> {
-                            // No location access granted.
-                            Log.d("myTag", "No location access granted")
-                            Toast.makeText(
-                                this, "Please accept location permissions",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                    }
-                }
-            )
-
             //Observe main ui event flow
             LaunchedEffect(key1 = Unit, block = {
                 viewModel.mainActivityUiEventFlow.collectLatest {
-                    when(it) {
+                    when (it) {
                         is MainActivityUiEventFlow.Navigate -> {
                             navController.navigate(it.route)
                         }
@@ -278,6 +287,9 @@ class MainActivity : ComponentActivity() {
                                 it.fromRoute?.let { fr -> popUpTo(fr) }
                             }
                         }
+                        MainActivityUiEventFlow.NavigateUp -> {
+                            navController.popBackStack()
+                        }
                     }
                 }
             })
@@ -286,12 +298,7 @@ class MainActivity : ComponentActivity() {
             LaunchedEffect(key1 = currentRoute, key2 = isTracking, block = {
                 if (!showGestures) delay(5000L)
                 if (!hasLocationPermissions(this@MainActivity) && currentRoute != SPLASH_SCREEN) {
-                    launcher.launch(
-                        arrayOf(
-                            Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        )
-                    )
+                    launcher.launch(LOCATION_PERMISSIONS)
                 }
 
                 if (showGestures && !isTracking && hasLocationPermissions(this@MainActivity)) {
@@ -307,6 +314,60 @@ class MainActivity : ComponentActivity() {
             })
         }
     }
+
+    //Permissions Launcher
+    private val launcher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            when {
+                result.getOrElse(Manifest.permission.ACCESS_FINE_LOCATION, { false }) -> {
+                    // Precise location access granted.
+                    Log.d("myTag", "Precise location access granted")
+                    viewModel.onEvent(MainActivityEvent.CloseLocPermissionsDialog)
+
+                    if (!isGpsEnabled(this@MainActivity)) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Please turn on location",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        enableLocationSettings()
+                    } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+                }
+
+                result.getOrElse(Manifest.permission.ACCESS_COARSE_LOCATION, { false }) -> {
+                    // Only approximate location access granted.
+                    Log.d("myTag", "Only approximate location access granted")
+                    viewModel.onEvent(MainActivityEvent.CloseLocPermissionsDialog)
+
+                    if (!isGpsEnabled(this@MainActivity)) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Please turn on location",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        enableLocationSettings()
+                    } else sendCommandToService(Constants.ACTION_START_OR_RESUME_SERVICE)
+                }
+
+                else -> {
+                    val shouldShowRationale =
+                        LOCATION_PERMISSIONS.any { shouldShowRequestPermissionRationale(it) }
+                    if (shouldShowRationale) {
+                        viewModel.onEvent(MainActivityEvent.ShowLocPermissionsDialog())
+                    } else {
+                        viewModel.onEvent(MainActivityEvent.ShowLocPermissionsDialog(true))
+                    }
+
+                    // No location access granted.
+                    Log.d("myTag", "No location access granted")
+                    Toast.makeText(
+                        this, "Please accept location permissions",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+
 
     private fun observeLocationAvailability() {
         TrackingService.isLocationAvailable.observe(this) {
@@ -353,5 +414,13 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+    }
+
+
+    companion object {
+        val LOCATION_PERMISSIONS = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
     }
 }

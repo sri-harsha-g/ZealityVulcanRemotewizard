@@ -22,6 +22,9 @@ import coil.compose.rememberImagePainter
 import com.famas.frontendtask.R
 import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.util.cameraPermissionsGranted
+import com.famas.frontendtask.feature_face_auth.presentation.components.CaptureButton
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -34,6 +37,7 @@ fun CameraPreviewScreen(
     showSnackbar: (String) -> Unit
 ) {
     val context = LocalContext.current
+    val coroutine = rememberCoroutineScope()
     var startLaunchedEffect by remember { mutableStateOf(false) }
     val lifecycleOwner = LocalLifecycleOwner.current
     var previewView: PreviewView? = remember { null }
@@ -43,11 +47,13 @@ fun CameraPreviewScreen(
         onResult = {
             if (it && !startLaunchedEffect) {
                 startLaunchedEffect = true
-            } else Toast.makeText(
-                context,
-                context.getText(R.string.except_cam_perm),
-                Toast.LENGTH_SHORT
-            ).show()
+            } else {
+                Toast.makeText(
+                    context,
+                    context.getText(R.string.except_cam_perm),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     )
     var capturedFile by remember {
@@ -90,17 +96,19 @@ fun CameraPreviewScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
                 .padding(bottom = SpaceLarge),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (capturedFile != null) {
+            /*if (capturedFile != null) {
                 Button(onClick = { capturedFile = null }) {
-                    Text(text = "retake")
+                    Text(text = "Retake")
                 }
-            }
+            }*/
 
             if (capturing) {
                 CircularProgressIndicator()
-            } else Button(
+            } else CaptureButton(
+                retakePhoto = capturedFile != null,
                 onClick = {
                     if (!cameraPermissionsGranted(context)) launcher.launch(Manifest.permission.CAMERA)
                     else {
@@ -119,17 +127,13 @@ fun CameraPreviewScreen(
                                 }
                             )
                         } else {
-                            showSnackbar("verifying..")
+                            capturedFile = null
                         }
                     }
                 },
                 enabled = !capturing
-            ) {
-                Text(text = if (capturedFile == null) "take photo" else "verify")
-            }
+            )
         }
     }
-
-
 //Use destroy in viewmodel to shutdown camera with cameraExecutor.shutdown()
 }

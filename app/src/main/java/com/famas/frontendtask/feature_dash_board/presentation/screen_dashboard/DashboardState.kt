@@ -1,4 +1,4 @@
-package com.famas.frontendtask.feature_dash_board.presentation
+package com.famas.frontendtask.feature_dash_board.presentation.screen_dashboard
 
 import com.famas.frontendtask.feature_dash_board.data.remote.response.DashBoardResponse
 

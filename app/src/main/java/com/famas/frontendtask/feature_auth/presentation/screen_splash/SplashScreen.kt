@@ -37,7 +37,10 @@ fun SplashScreen(
                     Log.d("myTag", "is dark: $it")
                     onNavigate(Screen.DashBoard.getRoute("$id?$IS_IN_DARK=$it"))
                 }
-            } ?: onNavigate(Constants.AUTH_SCREEN)
+            } ?: kotlin.run {
+                Log.d("myTag", "navigating to auth route")
+                onNavigate(Constants.AUTH_SCREEN)
+            }
         }
     })
 

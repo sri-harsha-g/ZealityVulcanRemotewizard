@@ -18,12 +18,14 @@ import com.famas.frontendtask.core.util.hasLocationPermissions
 import com.famas.frontendtask.core.util.isGpsEnabled
 import com.famas.frontendtask.tracking_service.TrackingService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val application: Application,
@@ -41,7 +43,6 @@ class MainViewModel @Inject constructor(
     //Managing permissions and starting service
     val isTracking = TrackingService.isTracking
 
-
     fun onEvent(event: MainActivityEvent) {
         viewModelScope.launch {
             when (event) {
@@ -50,19 +51,56 @@ class MainViewModel @Inject constructor(
                 }
 
                 is MainActivityEvent.OpenBottomBar -> {
-                    if (event.fromRoute !in listOf(
-                            Profile,
-                            Search,
-                            Notifications
-                        ).map { it.route }
-                    ) {
-                        _mainActivityState.value =
-                            mainActivityState.value.copy(openedBottomBarFromRoute = event.fromRoute)
+                    if (event.screen.route == event.fromRoute) {
+                        _mainActivityUiEventFlow.emit(MainActivityUiEventFlow.NavigateUp)
+                    } else {
+                        if (event.fromRoute !in listOf(
+                                Profile,
+                                Search,
+                                Notifications
+                            ).map { it.route }
+                        ) {
+                            _mainActivityState.value =
+                                mainActivityState.value.copy(openedBottomBarFromRoute = event.fromRoute)
+                        }
+                        _mainActivityUiEventFlow.emit(
+                            MainActivityUiEventFlow.OpenBottomBar(
+                                route = event.screen.route,
+                                fromRoute = mainActivityState.value.openedBottomBarFromRoute
+                            )
+                        )
                     }
-                    _mainActivityUiEventFlow.emit(
-                        MainActivityUiEventFlow.OpenBottomBar(
-                            route = event.screen.route,
-                            fromRoute = mainActivityState.value.openedBottomBarFromRoute
+                }
+
+                is MainActivityEvent.ShowLocPermissionsDialog -> {
+                    _mainActivityState.value = mainActivityState.value.copy(
+                        locationDialogState = LocationDialogState(
+                            showLocationDialog = true,
+                            isPermissionsDeniedPermanently = event.shouldShowRationale
+                        )
+                    )
+                }
+
+                is MainActivityEvent.CloseLocPermissionsDialog -> {
+                    _mainActivityState.value = mainActivityState.value.copy(
+                        locationDialogState = LocationDialogState(
+                            showLocationDialog = false
+                        )
+                    )
+                }
+
+                MainActivityEvent.HideOpenSettingsText -> {
+                    _mainActivityState.value = mainActivityState.value.copy(
+                        locationDialogState = mainActivityState.value.locationDialogState.copy(
+                            showOpenSettingsText = false
+                        )
+                    )
+                }
+
+                MainActivityEvent.ShowOpenSettingsText -> {
+                    _mainActivityState.value = mainActivityState.value.copy(
+                        locationDialogState = mainActivityState.value.locationDialogState.copy(
+                            showOpenSettingsText = true
                         )
                     )
                 }

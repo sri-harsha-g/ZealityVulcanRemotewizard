@@ -1,5 +1,6 @@
 package com.famas.frontendtask.feature_loans.presentation.screen_apply_loan
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,11 +20,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.famas.frontendtask.R
 import com.famas.frontendtask.core.presentation.components.DropDown
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
+import com.famas.frontendtask.core.ui.theme.SpaceLarge
 import com.famas.frontendtask.core.ui.theme.SpaceMedium
 import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
 import com.famas.frontendtask.core.ui.theme.defaultScreenPadding
 import com.famas.frontendtask.core.util.extensions.primaryTextStyle
 
+@ExperimentalAnimationApi
 @Composable
 fun ApplyLoanScreen(
     viewModel: ApplyLoanViewModel = hiltViewModel()
@@ -38,6 +41,7 @@ fun ApplyLoanScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         item {
+            Spacer(modifier = Modifier.height(SpaceLarge))
             Column {
                 Text(text = "Please enter the amount here", style = primaryTextStyle())
                 OutlinedTextField(
@@ -59,9 +63,9 @@ fun ApplyLoanScreen(
                 
                 Spacer(modifier = Modifier.height(SpaceSemiLarge))
                 DropDown(
-                    list = remember { state.applyLoanDropDown.list.map { it.label } },
+                    dropDownItems = remember { state.applyLoanDropDown.list.map { it.label } },
                     selectedIndex = state.applyLoanDropDown.selectedIndex,
-                    onSelected = { viewModel.onEvent(ApplyLoanEvent.OnSelectLoan(it)) },
+                    onItemSelected = { viewModel.onEvent(ApplyLoanEvent.OnSelectLoan(it)) },
                     heading = stringResource(R.string.pls_select_loan_type),
                     hint = stringResource(R.string.loan_type_hint),
                     modifier = Modifier.padding(vertical = SpaceSemiLarge)

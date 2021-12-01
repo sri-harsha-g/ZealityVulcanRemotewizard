@@ -31,34 +31,32 @@ fun PrimaryButton(
     textStyle: TextStyle = boldTextStyle(),
     horizontalArrangement: Arrangement.Horizontal = Arrangement.SpaceAround,
     shape: Shape = DefaultShape,
+    enabled: Boolean = true,
     onClick: () -> Unit
 ) {
-    Box {
-        Row(
-            modifier = modifier
-                .defaultMinSize(minWidth = 140.dp, minHeight = 45.dp)
-                .clip(shape = shape)
-                .background(color)
-                .clickable(onClick = onClick),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = horizontalArrangement
-        ) {
-            Text(
-                text = text,
-                color = textColor,
-                style = textStyle,
-                modifier = Modifier.padding(horizontal = SpaceSmall)
+    Row(
+        modifier = modifier
+            .defaultMinSize(minWidth = 140.dp, minHeight = 45.dp)
+            .clip(shape = shape)
+            .background(color)
+            .clickable(enabled = enabled, onClick = onClick),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = horizontalArrangement
+    ) {
+        Text(
+            text = text,
+            color = textColor,
+            style = textStyle,
+            modifier = Modifier.padding(horizontal = SpaceSmall)
+        )
+
+        icon?.let {
+            Icon(
+                imageVector = it,
+                contentDescription = null,
+                modifier = Modifier.padding(SpaceMedium),
+                tint = contentColorFor(backgroundColor = MaterialTheme.colors.surface).copy(alpha = 0.8f)
             )
-
-            icon?.let {
-                Icon(
-                    imageVector = it,
-                    contentDescription = null,
-                    modifier = Modifier.padding(SpaceMedium),
-                    tint = contentColorFor(backgroundColor = MaterialTheme.colors.surface).copy(alpha = 0.8f)
-                )
-            }
         }
-
     }
 }

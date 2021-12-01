@@ -1,12 +1,21 @@
 package com.famas.frontendtask.core.ui.theme
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.*
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.animateValueAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.MaterialTheme.shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import com.famas.frontendtask.core.util.TextColor.textPrimaryDarkColor
 import com.famas.frontendtask.core.util.TextColor.textPrimaryLightColor
 import com.famas.frontendtask.core.util.TextColor.textSecondaryDarkColor
@@ -166,6 +175,7 @@ enum class ColorPallet {
     RED, PURPLE, GREEN, ORANGE, BLUE, YELLOW, PINK
 }
 
+@ExperimentalAnimationApi
 @Composable
 fun FrontendTaskTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -192,18 +202,3 @@ fun FrontendTaskTheme(
         content = content
     )
 }
-
-
-/*
-@Composable
-fun FrontendTaskTheme(
-    colorPalette: Colors = LightColorPalette,
-    content: @Composable () -> Unit
-) {
-    MaterialTheme(
-        colors = colorPalette,
-        typography = Typography,
-        shapes = Shapes,
-        content = content
-    )
-}*/

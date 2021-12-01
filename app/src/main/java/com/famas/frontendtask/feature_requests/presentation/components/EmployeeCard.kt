@@ -2,8 +2,13 @@ package com.famas.frontendtask.feature_requests.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.ExperimentalUnitApi
 import com.famas.frontendtask.core.presentation.components.EmphasisText
 import com.famas.frontendtask.core.ui.theme.SpaceLarge
@@ -38,40 +44,56 @@ fun EmployeeCard(
         onClick = { expand = !expand },
         elevation = SpaceSemiSmall
     ) {
-        Column(modifier = Modifier.padding(horizontal = SpaceMedium, vertical = SpaceLarge)) {
-            HorizontalCardDetailItem(head = "Request type: ", text = "Request type")
-            if (showUserDetails)
-                HorizontalCardDetailItem(head = "Employee number: ", text = "1245313")
+        Column(horizontalAlignment = Alignment.End) {
+            Column(modifier = Modifier.padding(horizontal = SpaceMedium, vertical = SpaceMedium), horizontalAlignment = Alignment.End) {
+                HorizontalCardDetailItem(head = "Request type: ", text = "Request type")
+                if (showUserDetails)
+                    HorizontalCardDetailItem(head = "Employee number: ", text = "1245313")
 
-            HorizontalCardDetailItem(head = "No of days/hours: ", text = "10days")
-            HorizontalCardDetailItem(head = "Requested date: ", text = "12-09-2021")
+                HorizontalCardDetailItem(head = "No of days/hours: ", text = "10days")
+                HorizontalCardDetailItem(head = "Requested date: ", text = "12-09-2021")
 
-            AnimatedVisibility(visible = expand) {
-                Column {
-                    if (showUserDetails) {
-                        HorizontalCardDetailItem(head = "Employee name: ", text = "Sai kunkupudi")
-                        HorizontalCardDetailItem(head = "Branch: ", text = "Chemical")
-                        HorizontalCardDetailItem(head = "Department: ", text = "Executive")
-                    }
-                    VerticalCardDetailItem(
-                        head = "Reason:",
-                        text = "Reason is the reason that might not be the reason.Reason Reason is the reason that might not be the reason.Reason Reason Reason is the reason that might not be the reason."
-                    )
-                    if (showButtons) {
-                        Divider()
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            TextButton(onClick = onAccept, modifier = Modifier.weight(0.5f)) {
-                                Text(text = "Accept")
-                            }
-                            TextButton(onClick = onReject, modifier = Modifier.weight(0.5f)) {
-                                Text(text = "Reject")
+                AnimatedVisibility(visible = expand) {
+                    Column {
+                        if (showUserDetails) {
+                            HorizontalCardDetailItem(
+                                head = "Employee name: ",
+                                text = "Sai kunkupudi"
+                            )
+                            HorizontalCardDetailItem(head = "Branch: ", text = "Chemical")
+                            HorizontalCardDetailItem(head = "Department: ", text = "Executive")
+                        }
+                        VerticalCardDetailItem(
+                            head = "Reason:",
+                            text = "Reason is the reason that might not be the reason.Reason Reason is the reason that might not be the reason.Reason Reason Reason is the reason that might not be the reason."
+                        )
+                        if (showButtons) {
+                            Divider()
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceEvenly
+                            ) {
+                                TextButton(onClick = onAccept, modifier = Modifier.weight(0.5f)) {
+                                    Text(text = "Accept")
+                                }
+                                TextButton(onClick = onReject, modifier = Modifier.weight(0.5f)) {
+                                    Text(text = "Reject")
+                                }
                             }
                         }
                     }
                 }
+            }
+            IconButton(onClick = { expand = !expand }) {
+                Icon(
+                    imageVector = Icons.Default.KeyboardArrowDown,
+                    contentDescription = "",
+                    modifier = Modifier.graphicsLayer(
+                        rotationZ = animateFloatAsState(
+                            targetValue = if (expand) 180f else 0f
+                        ).value
+                    )
+                )
             }
         }
     }

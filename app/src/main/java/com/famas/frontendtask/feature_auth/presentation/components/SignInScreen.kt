@@ -51,11 +51,11 @@ fun SignInScreen(
 
             ) {
                 item {
-                    60.height()
+                    60.Height()
                     Text("Welcome Back", style = boldTextStyle(fontSize = 28.sp))
-                    4.height()
+                    4.Height()
                     Text("Log in to continue", style = secondaryTextStyle())
-                    24.height()
+                    24.Height()
                     Image(
                         painter = rememberImagePainter(data = R.drawable.ic_singn_in_logo),
                         contentScale = ContentScale.Crop,
@@ -64,7 +64,7 @@ fun SignInScreen(
                             .height(150.dp)
                             .width(150.dp)
                     )
-                    32.height()
+                    32.Height()
                     TextField(
                         value = email,
                         onValueChange = onEmail,
@@ -95,7 +95,7 @@ fun SignInScreen(
                             unfocusedIndicatorColor = Color.Transparent,
                         )
                     )
-                    16.height()
+                    16.Height()
                     TextField(
                         value = password,
                         onValueChange = onPassword,
@@ -131,7 +131,7 @@ fun SignInScreen(
                             }
                         }
                     )
-                    16.height()
+                    16.Height()
 
                     Row(
                         modifier = Modifier
@@ -145,7 +145,7 @@ fun SignInScreen(
                             style = boldTextStyle(fontSize = 22.sp),
                             textAlign = TextAlign.Center
                         )
-                        16.width()
+                        16.Width()
                         FloatingActionButton(
                             onClick = onLoginClick,
                             modifier = Modifier
@@ -162,7 +162,7 @@ fun SignInScreen(
                         }
 
                     }
-                    16.height()
+                    16.Height()
                 }
             }
 

@@ -2,6 +2,8 @@ package com.famas.frontendtask.core.presentation.util
 
 import android.content.res.Resources
 import android.util.TypedValue
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import java.util.*
@@ -15,11 +17,10 @@ fun Dp.toPx(): Float {
     )
 }
 
-
+@Composable
 fun Float.toDp(): Dp {
-    return (this / Resources.getSystem().displayMetrics.density).dp
+    return with(LocalDensity.current) { toDp() }
 }
-
 
 fun Long?.toDate(): String {
     return this?.let {

@@ -8,6 +8,4 @@ import javax.inject.Inject
 @HiltViewModel
 class ManageLoansViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
-
-}
+) : ViewModel()

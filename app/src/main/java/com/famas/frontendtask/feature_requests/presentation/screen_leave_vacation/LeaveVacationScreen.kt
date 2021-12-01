@@ -1,28 +1,32 @@
 package com.famas.frontendtask.feature_requests.presentation.screen_leave_vacation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.famas.frontendtask.core.presentation.components.DateTimePicker
 import com.famas.frontendtask.core.presentation.components.DropDown
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.presentation.util.UiEvent
-import com.famas.frontendtask.core.ui.theme.SpaceMedium
-import com.famas.frontendtask.core.ui.theme.SpaceSemiLarge
-import com.famas.frontendtask.core.ui.theme.defaultScreenPadding
+import com.famas.frontendtask.core.presentation.util.toDp
+import com.famas.frontendtask.core.ui.theme.*
 import com.famas.frontendtask.core.util.extensions.primaryTextStyle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @Composable
 fun LeaveVacationRequest(
     viewModel: LeaveVacationViewModel = hiltViewModel(),
@@ -61,23 +65,22 @@ fun LeaveVacationRequest(
     })
 
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .defaultScreenPadding(),
+        modifier = Modifier.defaultScreenPadding(),
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally,
         state = lazyListState
     ) {
         item {
+            Spacer(modifier = Modifier.height(SpaceLarge))
             DropDown(
                 heading = "Select permission type",
                 hint = "permission type",
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = SpaceMedium),
-                list = state.permissionDDState.list.map { it.name },
+                dropDownItems = state.permissionDDState.list.map { it.name },
                 selectedIndex = state.permissionDDState.selectedIndex,
-                onSelected = { viewModel.onEvent(LeaveVacationEvent.OnSelectPermType(it)) }
+                onItemSelected = { viewModel.onEvent(LeaveVacationEvent.OnSelectPermType(it)) }
             )
 
             Spacer(modifier = Modifier.height(SpaceSemiLarge))
@@ -107,15 +110,24 @@ fun LeaveVacationRequest(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
-                label = { Text(text = "Reason", style = primaryTextStyle(MaterialTheme.colors.primary)) },
+                label = {
+                    Text(
+                        text = "Reason",
+                        style = primaryTextStyle(MaterialTheme.colors.primary)
+                    )
+                },
                 textStyle = primaryTextStyle()
             )
         }
-
         item {
             Spacer(modifier = Modifier.height(SpaceSemiLarge))
-            PrimaryButton(text = "APPLY", modifier = Modifier.padding(horizontal = SpaceMedium)) {
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+                PrimaryButton(
+                    text = "APPLY",
+                    modifier = Modifier.padding(horizontal = SpaceMedium)
+                ) {
 
+                }
             }
             Spacer(modifier = Modifier.height(SpaceMedium))
         }

@@ -32,8 +32,8 @@ fun RequestScreen(
     navController: NavController,
     scaffoldState: ScaffoldState
 ) {
-    val firstLazyListState = rememberLazyListState()
-    val secondLazyListState = rememberLazyListState()
+    //val firstLazyListState = rememberLazyListState()
+    //val secondLazyListState = rememberLazyListState()
     val state = viewModel.requestsScreenState.value
     val coroutine = rememberCoroutineScope()
     val bottomSheetScaffoldState = rememberBottomSheetScaffoldState()
@@ -87,11 +87,7 @@ fun RequestScreen(
         sheetShape = RoundedCornerShape(topStart = SpaceSmall, topEnd = SpaceSmall),
         scaffoldState = bottomSheetScaffoldState
     ) {
-        AppliedUserRequests(
-            modifier = Modifier.fillMaxSize(),
-            firstLazyListState = firstLazyListState,
-            secondLazyListState = secondLazyListState,
-        )
+        AppliedUserRequests(modifier = Modifier.fillMaxSize())
     }
 
     /*Box(modifier = Modifier.fillMaxSize()) {

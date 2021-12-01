@@ -1,4 +1,4 @@
-package com.famas.frontendtask.core.presentation.activity_main
+package com.famas.frontendtask.core.presentation.activity_main.util
 
 import com.famas.frontendtask.core.navigation.Screen
 

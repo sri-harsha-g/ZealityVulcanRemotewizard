@@ -11,4 +11,4 @@ val SpaceSemiLarge = 16.dp
 val SpaceLarge = 20.dp
 
 
-fun Modifier.defaultScreenPadding(): Modifier = padding(start = SpaceLarge, end = SpaceLarge, top = SpaceLarge)
+fun Modifier.defaultScreenPadding(): Modifier = padding(horizontal = SpaceLarge)

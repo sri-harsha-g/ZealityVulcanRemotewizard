@@ -1,14 +1,13 @@
 package com.famas.frontendtask.feature_manual_attendence.presentation
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarResult
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,12 +16,14 @@ import androidx.navigation.NavController
 import com.famas.frontendtask.R
 import com.famas.frontendtask.core.presentation.components.DateTimePicker
 import com.famas.frontendtask.core.presentation.components.DropDown
+import com.famas.frontendtask.core.presentation.components.DropUpTextField
 import com.famas.frontendtask.core.presentation.components.PrimaryButton
 import com.famas.frontendtask.core.presentation.util.UiEvent
 import com.famas.frontendtask.core.ui.theme.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @Composable
 fun ManualAttendanceScreen(
     viewModel: ManualAttendanceViewModel = hiltViewModel(),
@@ -68,29 +69,28 @@ fun ManualAttendanceScreen(
         state = lazyListState
     ) {
         item {
+            Spacer(modifier = Modifier.height(SpaceLarge))
             DropDown(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = SpaceSemiLarge),
                 heading = stringResource(R.string.select_department),
                 hint = stringResource(R.string.department),
-                list = state.departmentsDropDown.list,
+                dropDownItems = state.departmentsDropDown.list,
                 selectedIndex = state.departmentsDropDown.selectedIndex,
-                onSelected = { viewModel.onEvent(MAttendanceEvent.OnDepartmentSelected(it)) }
+                onItemSelected = { viewModel.onEvent(MAttendanceEvent.OnDepartmentSelected(it)) }
             )
             Spacer(modifier = Modifier.height(SpaceLarge))
-            
-            DropDown(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = SpaceSemiLarge),
+
+            DropUpTextField(
+                value = state.employeeDropDown.fieldValue,
+                onValueChange = { viewModel.onEvent(MAttendanceEvent.OnEmployeeTextValue(it)) },
+                dropDownItems = state.employeeDropDown.list,
+                selectedIndex = state.employeeDropDown.selectedIndex,
+                onItemSelected = { viewModel.onEvent(MAttendanceEvent.OnEmployeeSelected(it)) },
                 heading = stringResource(R.string.select_employee),
                 hint = stringResource(R.string.employee),
-                list = state.employeeDropDown.list,
-                selectedIndex = state.employeeDropDown.selectedIndex,
-                onSelected = {
-                    viewModel.onEvent(MAttendanceEvent.OnEmployeeSelected(it))
-                }
+                modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(SpaceLarge))
 

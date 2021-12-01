@@ -4,17 +4,6 @@ import androidx.compose.ui.graphics.Color
 import com.famas.frontendtask.core.util.Pref
 import com.famas.frontendtask.core.util.extensions.getSharedPrefInstance
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-val Orange700 = Color(0xFFF45B49)
-val Orange100 = Color(0xFFFFCCBC)
-
-val PrimaryBlueGreen = Color(0xff1A434E)
-val SecBlueGreen = Color(0xFF3A4564)
-val CBlueGreen = Color(0xFF3A4564)
-
 //val ghost_white = Color(0xffF3F3F3)
 
 // Theme Color
@@ -41,6 +30,12 @@ val appBarDarkBlackDark = Color(0xFF282828)
 val iconTint1= Color(0xFF8998FE)
 val iconTint2= Color(0xFFFF9781)
 val iconTint3= Color(0xFF0A79DF)
+
+val progress1 = Color(0xFF7dd88e)
+val progress2 = Color(0xFFfb9a50)
+val progress3 = Color(0xFFcc4344)
+val progress4 = Color(0xFF90427a)
+val progress5 = Color(0xFF1dd1fa)
 
 val appShadowColor= Color(0x1F000000)
 val appDarkShadowColor= Color(0x1FFFFFFF)

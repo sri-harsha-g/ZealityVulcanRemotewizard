@@ -15,7 +15,7 @@ import com.famas.frontendtask.core.util.Constants.SCREEN_SLIDE_DURATION
 import com.famas.frontendtask.core.util.Constants.SPLASH_SCREEN
 import com.famas.frontendtask.feature_auth.presentation.screen_auth.AuthScreen
 import com.famas.frontendtask.feature_auth.presentation.screen_splash.SplashScreen
-import com.famas.frontendtask.feature_dash_board.presentation.DashBoardScreen
+import com.famas.frontendtask.feature_dash_board.presentation.screen_dashboard.DashBoardScreen
 import com.famas.frontendtask.feature_face_auth.presentation.CameraPreviewScreen
 import com.famas.frontendtask.feature_hrms.presentation.HRMS
 import com.famas.frontendtask.feature_id_card.presentation.IDCardScreen
@@ -84,23 +84,50 @@ fun MainNavHost(
             DashBoardScreen(scaffoldState, navController)
         }
 
-        composable(ManualAttendance.route) {
+        composable(
+            ManualAttendance.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+            popExitTransition = {
+                slideOutHorizontally(targetOffsetX = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
+            }
+        ) {
             ManualAttendanceScreen(navController = navController, scaffoldState = scaffoldState)
         }
 
-        composable(HRMS.route) {
+        composable(
+            HRMS.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             HRMS()
         }
 
-        composable(Requests.route) {
+        composable(
+            Requests.route
+        ) {
             RequestScreen(navController = navController, scaffoldState = scaffoldState)
         }
 
-        composable(Payslips.route) {
+        composable(
+            Payslips.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             PayslipsScreen()
         }
 
-        composable(IDCard.route) {
+        composable(
+            IDCard.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             IDCardScreen()
         }
 
@@ -112,19 +139,27 @@ fun MainNavHost(
             })
         }
 
-        composable(Reports.route) {
+        composable(
+            Reports.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             ReportsScreen()
         }
 
         composable(
             LeaveOrVacationRequest.route,
-            enterTransition = { _, _ ->
+            popEnterTransition = {
+                fadeIn()
+            },
+            enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { 1000 },
                     animationSpec = tween(SCREEN_SLIDE_DURATION)
                 )
             },
-            popExitTransition = { _, _ ->
+            popExitTransition = {
                 slideOutHorizontally(
                     targetOffsetX = { 1000 }, animationSpec = tween(
                         SCREEN_SLIDE_DURATION
@@ -135,19 +170,27 @@ fun MainNavHost(
             LeaveVacationRequest(navController = navController, scaffoldState = scaffoldState)
         }
 
-        composable(PendingRequests.route) {
+        composable(
+            PendingRequests.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             PendingRequests()
         }
 
         composable(OTSwipeLateRequest.route,
-            enterTransition = { _, _ ->
+            popEnterTransition = {
+                fadeIn()
+            },
+            enterTransition = {
                 slideInHorizontally(
                     initialOffsetX = { 1000 }, animationSpec = tween(
                         SCREEN_SLIDE_DURATION
                     )
                 )
             },
-            popExitTransition = { _, _ ->
+            popExitTransition = {
                 slideOutHorizontally(
                     targetOffsetX = { 1000 }, animationSpec = tween(
                         SCREEN_SLIDE_DURATION
@@ -161,11 +204,15 @@ fun MainNavHost(
 
         composable(
             Search.route,
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            enterTransition = {
+                slideInVertically(initialOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            exitTransition = {
+                slideOutVertically(targetOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             }
         ) {
 
@@ -173,11 +220,15 @@ fun MainNavHost(
 
         composable(
             Notifications.route,
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            enterTransition = {
+                slideInVertically(initialOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            exitTransition = {
+                slideOutVertically(targetOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             }
         ) {
 
@@ -185,22 +236,49 @@ fun MainNavHost(
 
         composable(
             Profile.route,
-            enterTransition = { _, _ ->
-                slideInVertically(initialOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            enterTransition = {
+                slideInVertically(initialOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             },
-            exitTransition = { _, _ ->
-                slideOutVertically(targetOffsetY = { 1000 }, tween(SCREEN_SLIDE_DURATION))
+            exitTransition = {
+                slideOutVertically(targetOffsetY = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
             }
         ) {
             ScreenProfile()
         }
 
 
-        composable(ApplyLoan.route) {
+        composable(
+            ApplyLoan.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+            enterTransition = {
+                slideInHorizontally(
+                    initialOffsetX = { 1000 },
+                    animationSpec = tween(SCREEN_SLIDE_DURATION)
+                )
+            },
+            popExitTransition = {
+                slideOutHorizontally(
+                    targetOffsetX = { 1000 }, animationSpec = tween(
+                        SCREEN_SLIDE_DURATION
+                    )
+                )
+            }
+        ) {
             ApplyLoanScreen()
         }
 
-        composable(ManageLoans.route) {
+        composable(
+            ManageLoans.route,
+            popEnterTransition = {
+                fadeIn()
+            },
+        ) {
             ManageLoansScreen()
         }
     }

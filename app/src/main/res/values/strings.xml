@@ -17,7 +17,7 @@
     <string name="select_department">Please select department</string>
     <string name="select_employee">Please select Employee</string>
     <string name="department">Department not selected</string>
-    <string name="employee">Employee not selected</string>
+    <string name="employee">Employee</string>
     <string name="btn_clock_in_txt">Clock-In</string>
     <string name="btn_clock_out_txt">Clock-Out</string>
     <string name="something_went_wrong">Something went wrong</string>

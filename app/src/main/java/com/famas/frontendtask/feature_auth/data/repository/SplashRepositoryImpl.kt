@@ -9,7 +9,7 @@ class SplashRepositoryImpl(
     private val splashApi : SplashApi
 ) : SplashRepository {
     override suspend fun checkForUpdates(): Response<Boolean> {
-        delay(1500)
+        delay(1000)
         return Response.Success(false)
     }
 }

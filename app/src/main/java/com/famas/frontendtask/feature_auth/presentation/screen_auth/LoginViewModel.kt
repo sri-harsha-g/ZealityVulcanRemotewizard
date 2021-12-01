@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +43,6 @@ class LoginViewModel @Inject constructor(
                             emailOrUserName = loginState.value.email,
                             password = loginState.value.password
                         )) {
-
                             is Response.Success -> {
                                 _loginState.value = loginState.value.copy(loading = false)
                                 when (result.source?.status) {

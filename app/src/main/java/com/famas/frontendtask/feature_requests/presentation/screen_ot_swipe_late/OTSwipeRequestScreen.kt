@@ -61,13 +61,14 @@ fun OTSwipeLateRequestScreen(
         state = lazyListState
     ) {
         item {
+            Spacer(modifier = Modifier.height(SpaceLarge))
             DropDown(
                 heading = stringResource(R.string.select_perm_type),
                 hint = stringResource(R.string.perm_type),
                 modifier = Modifier.padding(vertical = SpaceMedium),
-                list = state.permissionDDState.list.map { it.toString() },
+                dropDownItems = state.permissionDDState.list.map { it.toString() },
                 selectedIndex = state.permissionDDState.selectedIndex,
-                onSelected = { viewModel.onEvent(OTSwipeEvent.OnSelectPerType(it)) }
+                onItemSelected = { viewModel.onEvent(OTSwipeEvent.OnSelectPerType(it)) }
             )
 
             Spacer(modifier = Modifier.height(SpaceMedium))
@@ -114,13 +115,15 @@ fun OTSwipeLateRequestScreen(
         }
 
         item {
-            Spacer(modifier = Modifier.height(SpaceMedium))
-            PrimaryButton(
-                text = stringResource(R.string.apply_btn_txt)
-            ) {
-                viewModel.onEvent(OTSwipeEvent.OnClickApply)
+            Spacer(modifier = Modifier.height(SpaceSemiLarge))
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd){
+                PrimaryButton(
+                    text = stringResource(R.string.apply_btn_txt)
+                ) {
+                    viewModel.onEvent(OTSwipeEvent.OnClickApply)
+                }
             }
-            Spacer(modifier = Modifier.height(SpaceMedium))
+            Spacer(modifier = Modifier.height(SpaceSemiLarge))
         }
     }
 }

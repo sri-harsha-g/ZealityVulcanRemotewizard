@@ -10,5 +10,5 @@ val Shapes = Shapes(
     large = RoundedCornerShape(0.dp)
 )
 
-val QuarterCornerShape = RoundedCornerShape(25)
+val TenthPerShape = RoundedCornerShape(10)
 val DefaultShape = RoundedCornerShape(18)

@@ -26,13 +26,9 @@ import kotlinx.coroutines.launch
 @ExperimentalPagerApi
 @ExperimentalMaterialApi
 @Composable
-fun AppliedUserRequests(
-    modifier: Modifier = Modifier,
-    firstLazyListState: LazyListState = rememberLazyListState(),
-    secondLazyListState: LazyListState = rememberLazyListState()
-) {
+fun AppliedUserRequests(modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState(initialPage = 0)
-    val tabs = remember { listOf(RequestStatusTab.Pending, RequestStatusTab.Approved) }
+    val tabs = remember { listOf(RequestStatusTab.Pending, RequestStatusTab.Reviewed) }
     val coroutine = rememberCoroutineScope()
 
     Column(modifier = modifier) {
@@ -73,8 +69,7 @@ fun AppliedUserRequests(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = SpaceMedium),
-                        state = firstLazyListState
+                            .padding(horizontal = SpaceMedium)
                     ) {
                         items(15) {
                             EmployeeCard(
@@ -89,8 +84,7 @@ fun AppliedUserRequests(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(horizontal = SpaceMedium),
-                        state = secondLazyListState
+                            .padding(horizontal = SpaceMedium)
                     ) {
                         items(15) {
                             EmployeeCard(
@@ -106,5 +100,5 @@ fun AppliedUserRequests(
 }
 
 enum class RequestStatusTab(val label: String) {
-    Pending("Pending"), Approved("Approved")
+    Pending("Pending"), Reviewed("Reviewed")
 }

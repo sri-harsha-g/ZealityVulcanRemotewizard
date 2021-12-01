@@ -20,6 +20,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import com.famas.frontendtask.R
 import com.famas.frontendtask.core.data.local.database.location_db.LocationEntity
@@ -34,7 +35,10 @@ import com.famas.frontendtask.core.util.Constants.NOTIFICATION_CHANNEL_NAME
 import com.famas.frontendtask.core.util.Constants.NOTIFICATION_ID
 import com.famas.frontendtask.core.util.hasLocationPermissions
 import com.famas.frontendtask.core.util.isGpsEnabled
-import com.famas.frontendtask.core.util.isNetworkAvailable
+import com.famas.frontendtask.core.util.network_status.ConnectionState
+import com.famas.frontendtask.core.util.network_status.ConnectionState.*
+import com.famas.frontendtask.core.util.network_status.currentConnectivityState
+import com.famas.frontendtask.core.util.network_status.observeConnectivityAsFlow
 import com.famas.frontendtask.feature_auth.domain.use_cases.GetUserId
 import com.famas.frontendtask.feature_manual_attendence.domain.repository.AttendanceRepository
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -43,10 +47,13 @@ import com.google.android.gms.location.LocationRequest.PRIORITY_HIGH_ACCURACY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 @OptIn(ExperimentalAnimationApi::class, ExperimentalPagerApi::class, ExperimentalMaterialApi::class)
 class TrackingService : LifecycleService() {
@@ -61,6 +68,8 @@ class TrackingService : LifecycleService() {
 
     @Inject
     lateinit var getUserId: GetUserId
+
+    private var isInternetAvailable = false
 
     companion object {
         val isTracking = MutableLiveData<Boolean>()
@@ -77,10 +86,12 @@ class TrackingService : LifecycleService() {
 
     private fun postInitialValues() {
         isTracking.postValue(false)
+        observeConnectivityAsFlow().asLiveData().observe(this) {
+            isInternetAvailable = it == Available
+        }
     }
 
     override fun onCreate() {
-        super.onCreate()
         postInitialValues()
         fusedLocationProviderClient =
             LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -88,10 +99,10 @@ class TrackingService : LifecycleService() {
         isTracking.observe(this, {
             updateLocationTracking(it)
         })
+        super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        super.onStartCommand(intent, flags, startId)
         intent?.let {
             when (it.action) {
                 ACTION_START_OR_RESUME_SERVICE -> {
@@ -114,7 +125,7 @@ class TrackingService : LifecycleService() {
                 }
             }
         }
-        return Service.START_STICKY
+        return super.onStartCommand(intent, flags, Service.START_STICKY)
     }
 
     private fun startOrResumeService() {
@@ -174,6 +185,7 @@ class TrackingService : LifecycleService() {
 
         override fun onLocationAvailability(p0: LocationAvailability) {
             super.onLocationAvailability(p0)
+            Log.d("myTag", "location availability: ${p0.isLocationAvailable}")
             isLocationAvailable.postValue(p0.isLocationAvailable)
         }
     }
@@ -230,7 +242,7 @@ class TrackingService : LifecycleService() {
                 try {
                     Log.d(
                         "myTag",
-                        "network connection status: ${if (isNetworkAvailable(this)) "active" else "inactive"}"
+                        "network connection status: ${if (isInternetAvailable) "active" else "inactive"}"
                     )
 
                     CoroutineScope(Dispatchers.IO).launch {
@@ -238,7 +250,7 @@ class TrackingService : LifecycleService() {
                             Log.d("myTag", "user id in service: $user_id")
 
                             //Network connection available
-                            if (isNetworkAvailable(this@TrackingService)) {
+                            if (isInternetAvailable) {
                                 launch {
                                     //TODO have to update user location into server
                                 }
@@ -279,14 +291,14 @@ class TrackingService : LifecycleService() {
         Log.d("myTag", "saving loc into room db")
         if (networkLostTime.value == null) networkLostTime.postValue(location.time)
 
-        attendanceRepository.postLocationIntoDB(
+        /*attendanceRepository.postLocationIntoDB(
             locationEntity = LocationEntity(
                 time = location.time,
                 userId = userId,
                 latitude = location.latitude,
                 longitude = location.longitude
             )
-        )
+        )*/
     }
 
     private suspend fun postAvailableOfflineLocationsIntoServer(userId: String) {
